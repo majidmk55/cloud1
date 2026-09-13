@@ -1,7 +1,7 @@
 import { Page } from '../App';
 import { 
   LayoutDashboard, Globe, Puzzle, BookOpen, FolderTree, Database,
-  Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart
+  Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart, Server, Zap, Rocket, DollarSign, Brain, BarChart3, Layers, FileSearch
 } from 'lucide-react';
 interface SidebarProps {
   currentPage: Page;
@@ -23,6 +23,14 @@ const navItems: { id: Page; label: string; labelEn: string; icon: any; group: st
   { id: 'design', label: 'سیستم طراحی', labelEn: 'Design System', icon: Palette, group: 'طراحی' },
   { id: 'identity-phase2', label: 'فاز ۲: Identity', labelEn: 'Phase 2: Identity', icon: Shield, group: 'Backend' },
   { id: 'ordering-phase3', label: 'فاز ۳: Ordering', labelEn: 'Phase 3: Ordering', icon: ShoppingCart, group: 'Backend' },
+  { id: 'provisioning-phase4', label: 'فاز ۴: Provisioning', labelEn: 'Phase 4: Provisioning', icon: Server, group: 'Backend' },
+  { id: 'phase5-integration', label: 'فاز ۵: MVP Integration', labelEn: 'Phase 5: Integration', icon: Zap, group: 'Backend' },
+  { id: 'phase6-production', label: 'فاز ۶: Production', labelEn: 'Phase 6: Go-Live', icon: Rocket, group: 'Backend' },
+  { id: 'phase7-financial', label: 'فاز ۷: Financial', labelEn: 'Phase 7: Financial', icon: DollarSign, group: 'Backend' },
+  { id: 'phase8-to-10', label: 'فاز ۸-۱۰: Intelligence', labelEn: 'Phase 8-10: Intel', icon: Brain, group: 'Backend' },
+  { id: 'phase11-bi', label: 'فاز ۱۱: BI & Analytics', labelEn: 'Phase 11: BI', icon: BarChart3, group: 'Backend' },
+  { id: 'phase12-extensibility', label: 'فاز ۱۲: Extensibility', labelEn: 'Phase 12: Scale', icon: Layers, group: 'Backend' },
+  { id: 'comprehensive-audit', label: 'گزارش Audit جامع', labelEn: 'Comprehensive Audit', icon: FileSearch, group: 'عملیات' },
   { id: 'cicd', label: 'خط لوله CI/CD', labelEn: 'CI/CD Pipeline', icon: GitBranch, group: 'عملیات' },
   { id: 'techstack', label: 'پشته فناوری', labelEn: 'Tech Stack', icon: Wrench, group: 'عملیات' },
   { id: 'dod', label: 'تعریف تکمیل', labelEn: 'Definition of Done', icon: CheckCircle2, group: 'عملیات' },
