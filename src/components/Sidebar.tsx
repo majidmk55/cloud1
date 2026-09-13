@@ -22,12 +22,13 @@ const navItems: { id: Page; label: string; labelEn: string; icon: any; group: st
   { id: 'rbac', label: 'کنترل دسترسی', labelEn: 'RBAC Matrix', icon: Shield, group: 'امنیت' },
   { id: 'design-phase1', label: 'فاز ۱: Design System', labelEn: 'Phase 1: DS & UX', icon: Palette, group: 'طراحی' },
   { id: 'design', label: 'سیستم طراحی', labelEn: 'Design System', icon: Palette, group: 'طراحی' },
+  { id: 'identity-phase2', label: 'فاز ۲: Identity', labelEn: 'Phase 2: Identity', icon: Shield, group: 'Backend' },
   { id: 'cicd', label: 'خط لوله CI/CD', labelEn: 'CI/CD Pipeline', icon: GitBranch, group: 'عملیات' },
   { id: 'techstack', label: 'پشته فناوری', labelEn: 'Tech Stack', icon: Wrench, group: 'عملیات' },
   { id: 'dod', label: 'تعریف تکمیل', labelEn: 'Definition of Done', icon: CheckCircle2, group: 'عملیات' },
 ];
 
-const groups = ['معماری', 'مستندات', 'امنیت', 'طراحی', 'عملیات'];
+const groups = ['معماری', 'مستندات', 'امنیت', 'طراحی', 'Backend', 'عملیات'];
 
 export function Sidebar({ currentPage, setCurrentPage, isOpen, setIsOpen }: SidebarProps) {
   return (

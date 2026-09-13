@@ -10,6 +10,7 @@ import { ProviderAdapters } from './pages/ProviderAdapters';
 import { RBAC } from './pages/RBAC';
 import { DesignSystem } from './pages/DesignSystem';
 import { DesignSystemPhase1 } from './pages/DesignSystemPhase1';
+import { IdentityPhase2 } from './pages/IdentityPhase2';
 import { CICD } from './pages/CICD';
 import { TechStack } from './pages/TechStack';
 import { DoD } from './pages/DoD';
@@ -17,10 +18,10 @@ import { DoD } from './pages/DoD';
 export type Page =
   | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
   | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
-  | 'cicd' | 'techstack' | 'dod';
+  | 'identity-phase2' | 'cicd' | 'techstack' | 'dod';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('design-phase1');
+  const [currentPage, setCurrentPage] = useState<Page>('identity-phase2');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderPage = () => {
@@ -35,11 +36,12 @@ export default function App() {
       rbac: <RBAC />,
       design: <DesignSystem />,
       'design-phase1': <DesignSystemPhase1 />,
+      'identity-phase2': <IdentityPhase2 />,
       cicd: <CICD />,
       techstack: <TechStack />,
       dod: <DoD />,
     };
-    return pages[currentPage] || <DesignSystemPhase1 />;
+    return pages[currentPage] || <IdentityPhase2 />;
   };
 
   return (
