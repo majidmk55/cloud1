@@ -19,6 +19,7 @@ import { Phase7Financial } from './pages/Phase7Financial';
 import { Phase8to10 } from './pages/Phase8to10';
 import { Phase11BI } from './pages/Phase11BI';
 import { Phase12Extensibility } from './pages/Phase12Extensibility';
+import { ComprehensiveAudit } from './pages/ComprehensiveAudit';
 import { CICD } from './pages/CICD';
 import { TechStack } from './pages/TechStack';
 import { DoD } from './pages/DoD';
@@ -26,10 +27,10 @@ import { DoD } from './pages/DoD';
 export type Page =
   | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
   | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
-  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'phase12-extensibility' | 'cicd' | 'techstack' | 'dod';
+  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'phase12-extensibility' | 'comprehensive-audit' | 'cicd' | 'techstack' | 'dod';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('phase12-extensibility');
+  const [currentPage, setCurrentPage] = useState<Page>('comprehensive-audit');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderPage = () => {
@@ -53,11 +54,12 @@ export default function App() {
       'phase8-to-10': <Phase8to10 />,
       'phase11-bi': <Phase11BI />,
       'phase12-extensibility': <Phase12Extensibility />,
+      'comprehensive-audit': <ComprehensiveAudit />,
       cicd: <CICD />,
       techstack: <TechStack />,
       dod: <DoD />,
     };
-    return pages[currentPage] || <Phase12Extensibility />;
+    return pages[currentPage] || <ComprehensiveAudit />;
   };
 
   return (
