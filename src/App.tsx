@@ -17,6 +17,7 @@ import { Phase5Integration } from './pages/Phase5Integration';
 import { Phase6Production } from './pages/Phase6Production';
 import { Phase7Financial } from './pages/Phase7Financial';
 import { Phase8to10 } from './pages/Phase8to10';
+import { Phase11BI } from './pages/Phase11BI';
 import { CICD } from './pages/CICD';
 import { TechStack } from './pages/TechStack';
 import { DoD } from './pages/DoD';
@@ -24,10 +25,10 @@ import { DoD } from './pages/DoD';
 export type Page =
   | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
   | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
-  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'cicd' | 'techstack' | 'dod';
+  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'cicd' | 'techstack' | 'dod';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('phase8-to-10');
+  const [currentPage, setCurrentPage] = useState<Page>('phase11-bi');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderPage = () => {
@@ -49,11 +50,12 @@ export default function App() {
       'phase6-production': <Phase6Production />,
       'phase7-financial': <Phase7Financial />,
       'phase8-to-10': <Phase8to10 />,
+      'phase11-bi': <Phase11BI />,
       cicd: <CICD />,
       techstack: <TechStack />,
       dod: <DoD />,
     };
-    return pages[currentPage] || <Phase8to10 />;
+    return pages[currentPage] || <Phase11BI />;
   };
 
   return (
