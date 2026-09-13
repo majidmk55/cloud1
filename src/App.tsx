@@ -1,25 +1,61 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import { Sidebar } from './components/Sidebar';
+import { Overview } from './pages/Overview';
+import { HybridMultiSource } from './pages/HybridMultiSource';
+import { Contexts } from './pages/Contexts';
+import { ADRs } from './pages/ADRs';
+import { Repository } from './pages/Repository';
+import { DatabaseSchema } from './pages/DatabaseSchema';
+import { ProviderAdapters } from './pages/ProviderAdapters';
+import { RBAC } from './pages/RBAC';
+import { DesignSystem } from './pages/DesignSystem';
+import { CICD } from './pages/CICD';
+import { TechStack } from './pages/TechStack';
+import { DoD } from './pages/DoD';
 
-function App() {
-  const [count, setCount] = useState(0)
+export type Page =
+  | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
+  | 'database' | 'adapters' | 'rbac' | 'design' | 'cicd' | 'techstack' | 'dod';
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState<Page>('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const renderPage = () => {
+    const pages = {
+      overview: <Overview onNavigate={setCurrentPage} />,
+      hybrid: <HybridMultiSource />,
+      contexts: <Contexts />,
+      adrs: <ADRs />,
+      repository: <Repository />,
+      database: <DatabaseSchema />,
+      adapters: <ProviderAdapters />,
+      rbac: <RBAC />,
+      design: <DesignSystem />,
+      cicd: <CICD />,
+      techstack: <TechStack />,
+      dod: <DoD />,
+    };
+    return pages[currentPage] || <Overview onNavigate={setCurrentPage} />;
+  };
 
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="flex h-screen bg-[#050816] text-gray-100 overflow-hidden">
+      <Sidebar
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isOpen={sidebarOpen}
+        setIsOpen={setSidebarOpen}
+      />
+      <main
+        className={`flex-1 overflow-y-auto transition-all duration-300 ${
+          sidebarOpen ? 'mr-80' : 'mr-16'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-8 py-10">
+          {renderPage()}
+        </div>
+      </main>
+    </div>
+  );
 }
-
-export default App
