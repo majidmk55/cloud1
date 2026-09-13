@@ -20,6 +20,7 @@ const navItems: { id: Page; label: string; labelEn: string; icon: any; group: st
   { id: 'adrs', label: 'تصمیمات معماری', labelEn: 'ADRs (12)', icon: BookOpen, group: 'مستندات' },
   { id: 'repository', label: 'ساختار مخزن', labelEn: 'Repository', icon: FolderTree, group: 'مستندات' },
   { id: 'rbac', label: 'کنترل دسترسی', labelEn: 'RBAC Matrix', icon: Shield, group: 'امنیت' },
+  { id: 'design-phase1', label: 'فاز ۱: Design System', labelEn: 'Phase 1: DS & UX', icon: Palette, group: 'طراحی' },
   { id: 'design', label: 'سیستم طراحی', labelEn: 'Design System', icon: Palette, group: 'طراحی' },
   { id: 'cicd', label: 'خط لوله CI/CD', labelEn: 'CI/CD Pipeline', icon: GitBranch, group: 'عملیات' },
   { id: 'techstack', label: 'پشته فناوری', labelEn: 'Tech Stack', icon: Wrench, group: 'عملیات' },

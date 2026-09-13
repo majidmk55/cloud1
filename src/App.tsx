@@ -9,16 +9,18 @@ import { DatabaseSchema } from './pages/DatabaseSchema';
 import { ProviderAdapters } from './pages/ProviderAdapters';
 import { RBAC } from './pages/RBAC';
 import { DesignSystem } from './pages/DesignSystem';
+import { DesignSystemPhase1 } from './pages/DesignSystemPhase1';
 import { CICD } from './pages/CICD';
 import { TechStack } from './pages/TechStack';
 import { DoD } from './pages/DoD';
 
 export type Page =
   | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
-  | 'database' | 'adapters' | 'rbac' | 'design' | 'cicd' | 'techstack' | 'dod';
+  | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
+  | 'cicd' | 'techstack' | 'dod';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('overview');
+  const [currentPage, setCurrentPage] = useState<Page>('design-phase1');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderPage = () => {
@@ -32,11 +34,12 @@ export default function App() {
       adapters: <ProviderAdapters />,
       rbac: <RBAC />,
       design: <DesignSystem />,
+      'design-phase1': <DesignSystemPhase1 />,
       cicd: <CICD />,
       techstack: <TechStack />,
       dod: <DoD />,
     };
-    return pages[currentPage] || <Overview onNavigate={setCurrentPage} />;
+    return pages[currentPage] || <DesignSystemPhase1 />;
   };
 
   return (
