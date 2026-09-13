@@ -12,6 +12,7 @@ import { DesignSystem } from './pages/DesignSystem';
 import { DesignSystemPhase1 } from './pages/DesignSystemPhase1';
 import { IdentityPhase2 } from './pages/IdentityPhase2';
 import { OrderingPhase3 } from './pages/OrderingPhase3';
+import { ProvisioningPhase4 } from './pages/ProvisioningPhase4';
 import { CICD } from './pages/CICD';
 import { TechStack } from './pages/TechStack';
 import { DoD } from './pages/DoD';
@@ -19,10 +20,10 @@ import { DoD } from './pages/DoD';
 export type Page =
   | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
   | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
-  | 'identity-phase2' | 'ordering-phase3' | 'cicd' | 'techstack' | 'dod';
+  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'cicd' | 'techstack' | 'dod';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('ordering-phase3');
+  const [currentPage, setCurrentPage] = useState<Page>('provisioning-phase4');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderPage = () => {
@@ -39,11 +40,12 @@ export default function App() {
       'design-phase1': <DesignSystemPhase1 />,
       'identity-phase2': <IdentityPhase2 />,
       'ordering-phase3': <OrderingPhase3 />,
+      'provisioning-phase4': <ProvisioningPhase4 />,
       cicd: <CICD />,
       techstack: <TechStack />,
       dod: <DoD />,
     };
-    return pages[currentPage] || <OrderingPhase3 />;
+    return pages[currentPage] || <ProvisioningPhase4 />;
   };
 
   return (
