@@ -1,7 +1,7 @@
 import { Page } from '../App';
 import { 
   LayoutDashboard, Globe, Puzzle, BookOpen, FolderTree, Database,
-  Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart, Server, FileSearch
+  Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart, Server
 } from 'lucide-react';
 interface SidebarProps {
   currentPage: Page;
@@ -24,7 +24,6 @@ const navItems: { id: Page; label: string; labelEn: string; icon: any; group: st
   { id: 'identity-phase2', label: 'فاز ۲: Identity', labelEn: 'Phase 2: Identity', icon: Shield, group: 'Backend' },
   { id: 'ordering-phase3', label: 'فاز ۳: Ordering', labelEn: 'Phase 3: Ordering', icon: ShoppingCart, group: 'Backend' },
   { id: 'provisioning-phase4', label: 'فاز ۴: Provisioning', labelEn: 'Phase 4: Provisioning', icon: Server, group: 'Backend' },
-  { id: 'audit', label: 'گزارش Audit', labelEn: 'Audit Report', icon: FileSearch, group: 'عملیات' },
   { id: 'cicd', label: 'خط لوله CI/CD', labelEn: 'CI/CD Pipeline', icon: GitBranch, group: 'عملیات' },
   { id: 'techstack', label: 'پشته فناوری', labelEn: 'Tech Stack', icon: Wrench, group: 'عملیات' },
   { id: 'dod', label: 'تعریف تکمیل', labelEn: 'Definition of Done', icon: CheckCircle2, group: 'عملیات' },
