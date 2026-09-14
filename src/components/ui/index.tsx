@@ -1,429 +1,185 @@
-import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
-import { Loader2 } from 'lucide-react';
-import { cn } from '../../utils';
+import type { ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import { useState } from 'react';
 
-// ==================== Button ====================
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
-  size?: 'sm' | 'md' | 'lg';
-  loading?: boolean;
-  icon?: ReactNode;
-  iconPosition?: 'left' | 'right';
+// Card
+export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <div className={`card p-6 ${className}`}>{children}</div>;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', size = 'md', loading, icon, iconPosition = 'left', children, disabled, ...props }, ref) => {
-    const variants = {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700 border border-blue-600 shadow-lg shadow-blue-500/20',
-      secondary: 'bg-gray-700 text-white hover:bg-gray-600 border border-gray-700',
-      outline: 'bg-transparent text-gray-300 hover:bg-white/5 border border-white/10',
-      ghost: 'bg-transparent text-gray-300 hover:bg-white/5 border border-transparent',
-      destructive: 'bg-red-600 text-white hover:bg-red-700 border border-red-600 shadow-lg shadow-red-500/20',
-    };
-
-    const sizes = {
-      sm: 'h-8 px-3 text-xs rounded-md gap-1.5',
-      md: 'h-10 px-4 text-sm rounded-lg gap-2',
-      lg: 'h-12 px-6 text-base rounded-xl gap-2.5',
-    };
-
-    return (
-      <button
-        ref={ref}
-        className={cn(
-          'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]',
-          variants[variant],
-          sizes[size],
-          className
-        )}
-        disabled={disabled || loading}
-        {...props}
-      >
-        {loading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
-        ) : icon && iconPosition === 'left' ? (
-          <span className="flex-shrink-0">{icon}</span>
-        ) : null}
-        <span>{children}</span>
-        {icon && iconPosition === 'right' && !loading && (
-          <span className="flex-shrink-0">{icon}</span>
-        )}
-      </button>
-    );
-  }
-);
-Button.displayName = 'Button';
-
-// ==================== Card ====================
-export interface CardProps {
+// Badge
+export function Badge({ children, variant = 'default', size = 'md', className = '' }: {
   children: ReactNode;
+  variant?: 'default' | 'success' | 'warn' | 'danger' | 'info' | 'warning' | 'error' | 'owned' | 'partner' | 'european';
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
-  variant?: 'default' | 'elevated' | 'outlined' | 'filled';
-  hover?: boolean;
+}) {
+  const colors: Record<string, string> = {
+    default: 'bg-surface text-body border-border',
+    success: 'bg-success-soft text-success',
+    warn: 'bg-warn-soft text-warn',
+    warning: 'bg-warn-soft text-warn',
+    danger: 'bg-danger-soft text-danger',
+    error: 'bg-danger-soft text-danger',
+    info: 'bg-primary-soft text-primary',
+    owned: 'bg-success-soft text-success',
+    partner: 'bg-warn-soft text-warn',
+    european: 'bg-primary-soft text-primary',
+  };
+  const sizes: Record<string, string> = { sm: 'text-[10px] px-2 py-0.5', md: 'text-xs px-3 py-1', lg: 'text-sm px-4 py-1.5' };
+  return <span className={`inline-block rounded-full font-medium ${colors[variant] || colors.default} ${sizes[size] || sizes.md} ${className}`}>{children}</span>;
 }
 
-export function Card({ children, className, variant = 'default', hover = false }: CardProps) {
-  const variants = {
-    default: 'bg-gradient-to-br from-white/5 to-transparent border border-white/10',
-    elevated: 'bg-gradient-to-br from-white/5 to-transparent border border-white/10 shadow-xl shadow-black/20',
-    outlined: 'bg-transparent border border-white/10',
-    filled: 'bg-white/5 border border-white/10',
+// Alert
+export function Alert({ children, variant = 'info', title }: {
+  children: ReactNode; variant?: 'success' | 'warn' | 'danger' | 'info'; title?: string;
+}) {
+  const colors = {
+    success: 'bg-success-soft border-success/30 text-success',
+    warn: 'bg-warn-soft border-warn/30 text-warn',
+    danger: 'bg-danger-soft border-danger/30 text-danger',
+    info: 'bg-primary-soft border-primary/30 text-primary',
   };
-
   return (
-    <div
-      className={cn(
-        'rounded-2xl p-6 transition-all duration-200',
-        variants[variant],
-        hover && 'hover:scale-[1.01] hover:border-white/20 hover:shadow-xl hover:shadow-black/20',
-        className
-      )}
-    >
-      {children}
+    <div className={`rounded-xl border p-4 ${colors[variant]}`}>
+      {title && <div className="font-bold mb-1">{title}</div>}
+      <div className="text-sm">{children}</div>
     </div>
   );
 }
 
-// ==================== Input ====================
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  icon?: ReactNode;
-}
-
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, icon, ...props }, ref) => {
-    return (
-      <div className="space-y-1.5">
-        {label && (
-          <label className="block text-sm font-medium text-gray-300">
-            {label}
-          </label>
-        )}
-        <div className="relative">
-          {icon && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
-              {icon}
-            </div>
-          )}
-          <input
-            ref={ref}
-            className={cn(
-              'w-full h-10 px-3 bg-[#050816] border rounded-lg text-sm text-white placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500',
-              icon && 'pr-10',
-              error ? 'border-red-500/50 focus:ring-red-500/50 focus:border-red-500' : 'border-white/10',
-              className
-            )}
-            {...props}
-          />
-        </div>
-        {error && <p className="text-xs text-red-400">{error}</p>}
-      </div>
-    );
-  }
-);
-Input.displayName = 'Input';
-
-// ==================== Badge ====================
-export interface BadgeProps {
-  children: ReactNode;
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'owned' | 'partner' | 'european';
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
-
-export function Badge({ children, variant = 'default', size = 'md', className }: BadgeProps) {
+// Button
+export function Button({ children, variant = 'primary', className = '', ...props }: ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: 'primary' | 'outline' | 'ghost' | 'danger';
+}) {
   const variants = {
-    default: 'bg-white/5 text-gray-300 border-white/10',
-    success: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-    warning: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    error: 'bg-red-500/10 text-red-400 border-red-500/20',
-    info: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-    owned: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-    partner: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    european: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
+    primary: 'btn-primary',
+    outline: 'btn-outline',
+    ghost: 'bg-transparent text-primary hover:bg-primary-soft',
+    danger: 'bg-danger text-white hover:bg-danger/90',
   };
-
-  const sizes = {
-    sm: 'px-1.5 py-0.5 text-[10px]',
-    md: 'px-2 py-0.5 text-xs',
-    lg: 'px-3 py-1 text-sm',
-  };
-
   return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full border font-medium',
-        variants[variant],
-        sizes[size],
-        className
-      )}
-    >
+    <button className={`${variants[variant]} ${className}`} {...props}>
       {children}
-    </span>
+    </button>
   );
 }
 
-// ==================== Alert ====================
-export interface AlertProps {
-  children: ReactNode;
-  variant?: 'info' | 'success' | 'warning' | 'error';
-  title?: string;
-  icon?: ReactNode;
-  className?: string;
-}
-
-export function Alert({ children, variant = 'info', title, icon, className }: AlertProps) {
-  const variants = {
-    info: 'bg-blue-500/10 border-blue-500/30 text-blue-300',
-    success: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300',
-    warning: 'bg-amber-500/10 border-amber-500/30 text-amber-300',
-    error: 'bg-red-500/10 border-red-500/30 text-red-300',
-  };
-
+// Input
+export function Input({ className = '', ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className={cn('rounded-xl border p-4', variants[variant], className)} role="alert">
-      <div className="flex items-start gap-3">
-        {icon && <div className="flex-shrink-0 mt-0.5">{icon}</div>}
-        <div className="flex-1">
-          {title && <h4 className="font-semibold mb-1">{title}</h4>}
-          <div className="text-sm opacity-90">{children}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ==================== Skeleton ====================
-export interface SkeletonProps {
-  className?: string;
-  variant?: 'text' | 'circular' | 'rectangular';
-}
-
-export function Skeleton({ className, variant = 'rectangular' }: SkeletonProps) {
-  const variants = {
-    text: 'h-4 rounded',
-    circular: 'rounded-full',
-    rectangular: 'rounded-lg',
-  };
-
-  return (
-    <div
-      className={cn(
-        'bg-white/5 animate-pulse',
-        variants[variant],
-        className
-      )}
+    <input
+      className={`w-full bg-bg border border-border rounded-xl px-4 py-2.5 text-ink placeholder:text-faint focus:outline-none focus:border-primary transition-colors ${className}`}
+      {...props}
     />
   );
 }
 
-// ==================== LoadingSpinner ====================
-export interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
+// Skeleton
+export function Skeleton({ className = '' }: { className?: string }) {
+  return <div className={`animate-pulse bg-surface rounded-lg ${className}`} />;
 }
 
-export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) {
-  const sizes = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-10 h-10',
-  };
-
+// LoadingSpinner
+export function LoadingSpinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
+  const sizes = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12' };
   return (
-    <div className={cn('flex items-center justify-center', className)}>
-      <Loader2 className={cn('animate-spin text-blue-400', sizes[size])} />
-    </div>
+    <div className={`${sizes[size]} border-2 border-primary border-t-transparent rounded-full animate-spin`} />
   );
 }
 
-// ==================== EmptyState ====================
-export interface EmptyStateProps {
-  icon?: ReactNode;
-  title: string;
-  description?: string;
-  action?: ReactNode;
-}
-
-export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
+// EmptyState
+export function EmptyState({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      {icon && <div className="text-5xl mb-4 opacity-50">{icon}</div>}
-      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-      {description && <p className="text-sm text-gray-400 max-w-md mb-4">{description}</p>}
+    <div className="text-center py-12">
+      <div className="text-4xl mb-4">📭</div>
+      <h3 className="text-lg font-bold text-ink mb-2">{title}</h3>
+      {description && <p className="text-body text-sm mb-4">{description}</p>}
       {action}
     </div>
   );
 }
 
-// ==================== SourceLayerBadge ====================
-export interface SourceLayerBadgeProps {
-  layer: 'owned' | 'partner' | 'european';
-  size?: 'sm' | 'md' | 'lg';
-}
-
-export function SourceLayerBadge({ layer, size = 'md' }: SourceLayerBadgeProps) {
-  const config = {
-    owned: { label: 'مالکیتی', labelEn: 'Owned', icon: '🏢', variant: 'owned' as const },
-    partner: { label: 'شریک ایرانی', labelEn: 'Partner', icon: '🤝', variant: 'partner' as const },
-    european: { label: 'اروپایی', labelEn: 'European', icon: '🌍', variant: 'european' as const },
+// SourceLayerBadge
+export function SourceLayerBadge({ layer }: { layer: 'owned' | 'partner' | 'european' }) {
+  const colors = {
+    owned: 'bg-success-soft text-success',
+    partner: 'bg-warn-soft text-warn',
+    european: 'bg-primary-soft text-primary',
   };
+  const labels = { owned: 'اختصاصی', partner: 'شریک', european: 'اروپایی' };
+  return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[layer]}`}>{labels[layer]}</span>;
+}
 
-  const { label, icon, variant } = config[layer];
-
+// VisibilityToggle
+export function VisibilityToggle({ visible, onChange }: { visible: boolean; onChange: (v: boolean) => void }) {
   return (
-    <Badge variant={variant} size={size} className="gap-1.5">
-      <span>{icon}</span>
-      <span>{label}</span>
-    </Badge>
+    <button
+      onClick={() => onChange(!visible)}
+      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+        visible ? 'bg-success-soft text-success' : 'bg-surface text-muted'
+      }`}
+    >
+      {visible ? 'نمایان' : 'مخفی'}
+    </button>
   );
 }
 
-// ==================== VisibilityToggle ====================
-type VisibilityValue = 'public' | 'hidden' | 'deprecated' | 'inviteOnly';
-
-export interface VisibilityToggleProps {
-  value: VisibilityValue;
-  onChange: (value: VisibilityValue) => void;
-}
-
-export function VisibilityToggle({ value, onChange }: VisibilityToggleProps) {
-  const options: { value: VisibilityValue; label: string; icon: string; variant: 'success' | 'warning' | 'error' | 'info' }[] = [
-    { value: 'public', label: 'عمومی', icon: '🌐', variant: 'success' },
-    { value: 'hidden', label: 'مخفی', icon: '👁️', variant: 'warning' },
-    { value: 'deprecated', label: 'منسوخ', icon: '⚠️', variant: 'error' },
-    { value: 'inviteOnly', label: 'دعوت', icon: '✉️', variant: 'info' },
-  ];
-
+// PowerControl
+export function PowerControl({ status, onToggle }: { status: 'on' | 'off'; onToggle: () => void }) {
   return (
-    <div className="inline-flex rounded-lg border border-white/10 bg-white/5 p-1 gap-1">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          onClick={() => onChange(option.value)}
-          className={cn(
-            'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
-            value === option.value
-              ? 'bg-white/10 text-white'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
-          )}
-        >
-          <span className="ml-1">{option.icon}</span>
-          {option.label}
-        </button>
-      ))}
-    </div>
+    <button
+      onClick={onToggle}
+      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+        status === 'on' ? 'bg-success text-white' : 'bg-danger text-white'
+      }`}
+    >
+      {status === 'on' ? '⏻ روشن' : '⏻ خاموش'}
+    </button>
   );
 }
 
-// ==================== PowerControl ====================
-export interface PowerControlProps {
-  status: 'running' | 'stopped' | 'starting' | 'stopping';
-  onStart?: () => void;
-  onStop?: () => void;
-  onReboot?: () => void;
-}
-
-export function PowerControl({ status, onStart, onStop, onReboot }: PowerControlProps) {
-  const isTransitioning = status === 'starting' || status === 'stopping';
-
-  return (
-    <div className="flex items-center gap-2">
-      <Button
-        variant="primary"
-        size="sm"
-        onClick={onStart}
-        disabled={status === 'running' || isTransitioning}
-        loading={status === 'starting'}
-        className="bg-emerald-600 hover:bg-emerald-700 border-emerald-600"
-      >
-        ▶ روشن
-      </Button>
-      <Button
-        variant="destructive"
-        size="sm"
-        onClick={onStop}
-        disabled={status === 'stopped' || isTransitioning}
-        loading={status === 'stopping'}
-      >
-        ■ خاموش
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onReboot}
-        disabled={isTransitioning}
-      >
-        ↻ راه‌اندازی
-      </Button>
-    </div>
-  );
-}
-
-// ==================== ThemeToggle ====================
-import { useTheme, useLanguage } from '../../providers';
-
+// ThemeToggle
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-
   return (
-    <div className="inline-flex rounded-lg border border-white/10 bg-white/5 p-1 gap-1">
-      <button
-        onClick={() => setTheme('light')}
-        className={cn(
-          'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
-          theme === 'light' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
-        )}
-      >
-        ☀️ روشن
-      </button>
-      <button
-        onClick={() => setTheme('dark')}
-        className={cn(
-          'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
-          theme === 'dark' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
-        )}
-      >
-        🌙 تاریک
-      </button>
-      <button
-        onClick={() => setTheme('system')}
-        className={cn(
-          'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
-          theme === 'system' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
-        )}
-      >
-        💻 سیستم
-      </button>
-    </div>
+    <button className="p-2 rounded-lg hover:bg-surface transition-colors" aria-label="تغییر تم">
+      🌙
+    </button>
   );
 }
 
-// ==================== LanguageToggle ====================
+// LanguageToggle
 export function LanguageToggle() {
-  const { language, setLanguage } = useLanguage();
-
   return (
-    <div className="inline-flex rounded-lg border border-white/10 bg-white/5 p-1 gap-1">
-      <button
-        onClick={() => setLanguage('fa')}
-        className={cn(
-          'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
-          language === 'fa' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
-        )}
-      >
-        فارسی
-      </button>
-      <button
-        onClick={() => setLanguage('en')}
-        className={cn(
-          'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
-          language === 'en' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
-        )}
-      >
-        English
-      </button>
-    </div>
+    <button className="p-2 rounded-lg hover:bg-surface transition-colors text-sm" aria-label="تغییر زبان">
+      FA
+    </button>
   );
+}
+
+// Error Boundary
+import React from 'react';
+export class ErrorBoundary extends React.Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-bg flex items-center justify-center p-8">
+          <div className="card p-8 text-center max-w-md">
+            <h1 className="text-2xl font-bold text-danger mb-4">خطای غیرمنتظره</h1>
+            <p className="text-body mb-6">متأسفانه خطایی رخ داده است.</p>
+            <button onClick={() => window.location.reload()} className="btn-primary">
+              تلاش مجدد
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
 }

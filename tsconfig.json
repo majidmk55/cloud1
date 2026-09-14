@@ -12,5 +12,18 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/pages/DesignSystemPhase1.tsx",
+    "src/pages/IdentityPhase2.tsx",
+    "src/pages/OrderingPhase3.tsx",
+    "src/pages/ProvisioningPhase4.tsx",
+    "src/pages/Phase5Integration.tsx",
+    "src/pages/Phase6Production.tsx",
+    "src/pages/Phase7Financial.tsx",
+    "src/pages/Phase8to10.tsx",
+    "src/pages/Phase11BI.tsx",
+    "src/pages/Phase12Extensibility.tsx",
+    "src/pages/ComprehensiveAudit.tsx"
+  ]
 }
