@@ -533,7 +533,7 @@ export function SetupScript() {
   const [isRunning, setIsRunning] = useState(false);
   const [expandedPhase, setExpandedPhase] = useState<number | null>(0);
   const [copiedScript, setCopiedScript] = useState(false);
-  const [activeTab, setActiveTab] = useState<'terminal' | 'script' | 'analysis' | 'troubleshoot'>('terminal');
+  const [activeTab, setActiveTab] = useState<'guide' | 'terminal' | 'script' | 'analysis' | 'troubleshoot'>('guide');
   const [elapsed, setElapsed] = useState(0);
   const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -714,8 +714,9 @@ export function SetupScript() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-white/5 rounded-xl p-1 w-fit">
+      <div className="flex gap-1 bg-white/5 rounded-xl p-1 w-fit flex-wrap">
         {[
+          { id: 'guide' as const, label: '📘 راهنمای نصب', icon: FileCode },
           { id: 'terminal' as const, label: 'Terminal', icon: Terminal },
           { id: 'script' as const, label: 'اسکریپت PowerShell', icon: FileCode },
           { id: 'analysis' as const, label: 'تحلیل مخزن', icon: FolderTree },
@@ -735,6 +736,262 @@ export function SetupScript() {
           </button>
         ))}
       </div>
+
+      {/* Guide Tab */}
+      {activeTab === 'guide' && (
+        <div className="space-y-6">
+          {/* Quick Start */}
+          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl border border-emerald-500/30 p-6">
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <Zap className="w-6 h-6 text-emerald-400" />
+              شروع سریع (۳ مرحله)
+            </h2>
+            <div className="space-y-4">
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">1</div>
+                  <span className="text-white font-bold">کلون ریپازیتوری</span>
+                </div>
+                <code className="text-sm text-cyan-300 font-mono block mr-11" dir="ltr">
+                  git clone https://github.com/majidmk55/cloud1 abran-system<br/>
+                  cd abran-system
+                </code>
+              </div>
+
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm">2</div>
+                  <span className="text-white font-bold">نصب وابستگی‌ها</span>
+                </div>
+                <code className="text-sm text-cyan-300 font-mono block mr-11" dir="ltr">
+                  npm install
+                </code>
+              </div>
+
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">3</div>
+                  <span className="text-white font-bold">اجرای سرور</span>
+                </div>
+                <code className="text-sm text-cyan-300 font-mono block mr-11" dir="ltr">
+                  npm run dev
+                </code>
+                <div className="mt-2 mr-11 text-xs text-emerald-400">
+                  ✅ سایت در آدرس <span className="font-mono" dir="ltr">http://localhost:3000</span> در دسترس خواهد بود
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Prerequisites */}
+          <div className="bg-gradient-to-br from-white/5 to-transparent rounded-2xl border border-white/10 p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-amber-400" />
+              پیش‌نیازها
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
+                <div className="text-2xl mb-2">🟢</div>
+                <h3 className="text-white font-bold text-sm mb-1">Node.js 18+</h3>
+                <p className="text-xs text-gray-400 mb-2">نسخه LTS پیشنهاد می‌شود</p>
+                <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                  node --version
+                </code>
+              </div>
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
+                <div className="text-2xl mb-2">📦</div>
+                <h3 className="text-white font-bold text-sm mb-1">npm 9+</h3>
+                <p className="text-xs text-gray-400 mb-2">همراه Node.js نصب می‌شود</p>
+                <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                  npm --version
+                </code>
+              </div>
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
+                <div className="text-2xl mb-2">🔀</div>
+                <h3 className="text-white font-bold text-sm mb-1">Git</h3>
+                <p className="text-xs text-gray-400 mb-2">برای کلون ریپازیتوری</p>
+                <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                  git --version
+                </code>
+              </div>
+            </div>
+          </div>
+
+          {/* Detailed Steps */}
+          <div className="bg-gradient-to-br from-white/5 to-transparent rounded-2xl border border-white/10 p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <FileCode className="w-5 h-5 text-violet-400" />
+              مراحل کامل نصب
+            </h2>
+            <div className="space-y-4">
+              <div className="border-r-2 border-emerald-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۱: نصب پیش‌نیازها</h3>
+                <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
+                  <div className="text-xs text-gray-500 mb-1">Windows (با winget):</div>
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    winget install OpenJS.NodeJS.LTS<br/>
+                    winget install Git.Git
+                  </code>
+                  <div className="text-xs text-gray-500 mb-1 mt-3">macOS (با Homebrew):</div>
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    brew install node git
+                  </code>
+                  <div className="text-xs text-gray-500 mb-1 mt-3">Linux (Ubuntu/Debian):</div>
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -<br/>
+                    sudo apt-get install -y nodejs git
+                  </code>
+                </div>
+              </div>
+
+              <div className="border-r-2 border-cyan-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۲: کلون ریپازیتوری</h3>
+                <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    git clone https://github.com/majidmk55/cloud1 abran-system<br/>
+                    cd abran-system
+                  </code>
+                </div>
+              </div>
+
+              <div className="border-r-2 border-blue-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۳: نصب وابستگی‌ها</h3>
+                <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    npm install
+                  </code>
+                  <div className="text-[10px] text-gray-400 mt-2">
+                    ⏱️ این مرحله ممکن است ۱-۳ دقیقه طول بکشد
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-r-2 border-violet-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۴: اجرای سرور توسعه</h3>
+                <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    npm run dev
+                  </code>
+                  <div className="text-[10px] text-emerald-400 mt-2">
+                    ✅ سرور در http://localhost:3000 اجرا می‌شود
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-r-2 border-pink-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۵: Build برای Production (اختیاری)</h3>
+                <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
+                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
+                    npm run build<br/>
+                    npm run preview
+                  </code>
+                  <div className="text-[10px] text-gray-400 mt-2">
+                    فایل‌های بهینه‌شده در پوشه <code className="text-cyan-300" dir="ltr">dist/</code> قرار می‌گیرند
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Project Structure */}
+          <div className="bg-gradient-to-br from-white/5 to-transparent rounded-2xl border border-white/10 p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <FolderTree className="w-5 h-5 text-amber-400" />
+              ساختار پروژه
+            </h2>
+            <div className="bg-[#050816] rounded-xl p-4 border border-white/5 font-mono text-xs" dir="ltr">
+              <pre className="text-gray-300 leading-relaxed">{`abran-system/
+├── src/
+│   ├── components/      # کامپوننت‌های مشترک
+│   ├── pages/           # صفحات اصلی سایت
+│   ├── providers/       # Context providers
+│   ├── utils/           # توابع کمکی
+│   ├── App.tsx          # کامپوننت اصلی
+│   ├── main.tsx         # نقطه ورود
+│   └── index.css        # استایل‌های سراسری
+├── index.html           # HTML اصلی
+├── package.json         # وابستگی‌ها و اسکریپت‌ها
+├── vite.config.js       # تنظیمات Vite
+├── tsconfig.json        # تنظیمات TypeScript
+└── README.md            # مستندات`}</pre>
+            </div>
+          </div>
+
+          {/* Available Commands */}
+          <div className="bg-gradient-to-br from-white/5 to-transparent rounded-2xl border border-white/10 p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <Terminal className="w-5 h-5 text-emerald-400" />
+              دستورات موجود
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                { cmd: 'npm run dev', desc: 'اجرای سرور توسعه', icon: '🚀' },
+                { cmd: 'npm run build', desc: 'Build برای production', icon: '📦' },
+                { cmd: 'npm run typecheck', desc: 'بررسی خطاهای TypeScript', icon: '🔍' },
+                { cmd: 'npm run preview', desc: 'پیش‌نمایش build production', icon: '👁️' },
+              ].map((item) => (
+                <div key={item.cmd} className="bg-[#050816] rounded-xl p-4 border border-white/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">{item.icon}</span>
+                    <code className="text-sm text-cyan-300 font-mono" dir="ltr">{item.cmd}</code>
+                  </div>
+                  <p className="text-xs text-gray-400">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Access URLs */}
+          <div className="bg-gradient-to-br from-emerald-500/10 to-transparent rounded-2xl border border-emerald-500/20 p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <Globe className="w-5 h-5 text-emerald-400" />
+              آدرس‌های دسترسی
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
+                <div className="text-sm text-gray-300 font-medium mb-1">Development Server</div>
+                <code className="text-xs text-emerald-400 font-mono" dir="ltr">http://localhost:3000</code>
+                <div className="text-[10px] text-gray-500 mt-1">پس از اجرای <code className="text-cyan-300" dir="ltr">npm run dev</code></div>
+              </div>
+              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
+                <div className="text-sm text-gray-300 font-medium mb-1">Production Preview</div>
+                <code className="text-xs text-cyan-400 font-mono" dir="ltr">http://localhost:4173</code>
+                <div className="text-[10px] text-gray-500 mt-1">پس از اجرای <code className="text-cyan-300" dir="ltr">npm run preview</code></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Important Notes */}
+          <div className="bg-gradient-to-br from-amber-500/5 to-transparent rounded-2xl border border-amber-500/20 p-6">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
+              نکات مهم
+            </h2>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-400 mt-1">✓</span>
+                <span>این پروژه از <strong className="text-cyan-300">Tailwind CSS v4</strong> استفاده می‌کند</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-400 mt-1">✓</span>
+                <span>مدیر بسته <strong className="text-cyan-300">npm</strong> است (نه pnpm یا yarn)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-400 mt-1">✓</span>
+                <span>پورت پیش‌فرض <strong className="text-cyan-300">3000</strong> است (در vite.config.js تنظیم شده)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-emerald-400 mt-1">✓</span>
+                <span>فونت‌های <strong className="text-cyan-300">Vazirmatn</strong> و <strong className="text-cyan-300">JetBrains Mono</strong> از Google Fonts بارگذاری می‌شوند</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-400 mt-1">⚠</span>
+                <span>اگر پورت 3000 اشغال است، Vite به صورت خودکار پورت بعدی را استفاده می‌کند</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       {/* Terminal Tab */}
       {activeTab === 'terminal' && (
