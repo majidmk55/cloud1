@@ -50,6 +50,9 @@ export function Navbar() {
 
           {/* CTA + Mobile Toggle */}
           <div className="flex items-center gap-3">
+            <Link to="/login" className="hidden md:inline-block btn-outline text-sm !py-2 !px-4">
+              پنل مدیریت
+            </Link>
             <Link to="/contact" className="hidden md:inline-block btn-primary text-sm !py-2 !px-4">
               درخواست دمو
             </Link>
@@ -146,6 +149,8 @@ export function Footer() {
         <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted text-sm">© ۱۴۰۳ ابران سیستم. تمامی حقوق محفوظ است.</p>
           <div className="flex items-center gap-4 text-muted text-sm">
+            <Link to="/login" className="hover:text-primary transition-colors">پنل مدیریت</Link>
+            <span>•</span>
             <Link to="/architecture" className="hover:text-primary transition-colors">مستندات فنی</Link>
             <span>•</span>
             <span>قوانین و مقررات</span>

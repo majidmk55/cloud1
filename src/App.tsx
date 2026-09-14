@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PublicLayout } from './layouts/PublicLayout';
+import { AdminLayout } from './layouts/AdminLayout';
+import { AuthProvider } from './lib/auth';
 import { ErrorBoundary } from './components/ui';
 
 // Lazy-loaded public pages
@@ -13,6 +15,11 @@ const About = lazy(() => import('./pages/Other').then(m => ({ default: m.About }
 const Contact = lazy(() => import('./pages/Other').then(m => ({ default: m.Contact })));
 const Status = lazy(() => import('./pages/Other').then(m => ({ default: m.Status })));
 const NotFound = lazy(() => import('./pages/Other').then(m => ({ default: m.NotFound })));
+
+// Lazy-loaded admin pages
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard').then(m => ({ default: m.AdminDashboard })));
+const AdminBI = lazy(() => import('./pages/admin/BI').then(m => ({ default: m.AdminBI })));
 
 function LoadingFallback() {
   return (
@@ -32,26 +39,45 @@ function LoadingFallback() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <BrowserRouter>
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            {/* Public Website */}
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/ai" element={<AI />} />
-              <Route path="/datacenter" element={<DataCenter />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/status" element={<Status />} />
-            </Route>
+      <AuthProvider>
+        <BrowserRouter>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              {/* Public Website */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/ai" element={<AI />} />
+                <Route path="/datacenter" element={<DataCenter />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/status" element={<Status />} />
+              </Route>
 
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+              {/* Login */}
+              <Route path="/login" element={<Login />} />
+
+              {/* Admin Panel */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="bi" element={<AdminBI />} />
+                <Route path="revenue" element={<div className="text-ink">تقسیم درآمد (به زودی)</div>} />
+                <Route path="services" element={<div className="text-ink">سرویس‌ها (به زودی)</div>} />
+                <Route path="finance" element={<div className="text-ink">مالی (به زودی)</div>} />
+                <Route path="customers" element={<div className="text-ink">مشتریان (به زودی)</div>} />
+                <Route path="datacenters" element={<div className="text-ink">دیتاسنترها (به زودی)</div>} />
+                <Route path="reports" element={<div className="text-ink">گزارش‌ها (به زودی)</div>} />
+                <Route path="audit" element={<div className="text-ink">رویدادها (به زودی)</div>} />
+                <Route path="settings" element={<div className="text-ink">تنظیمات (به زودی)</div>} />
+              </Route>
+
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
