@@ -740,6 +740,19 @@ export function SetupScript() {
       {/* Guide Tab */}
       {activeTab === 'guide' && (
         <div className="space-y-6">
+          {/* Success Banner */}
+          <div className="bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-2xl border-2 border-emerald-500/40 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/30 flex items-center justify-center">
+                <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-emerald-300">✅ پیش‌نیازها آماده هستند!</h2>
+                <p className="text-sm text-gray-300">حالا فقط ۳ مرحله ساده تا راه‌اندازی سایت</p>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Start */}
           <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl border border-emerald-500/30 p-6">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
@@ -783,36 +796,33 @@ export function SetupScript() {
             </div>
           </div>
 
-          {/* Prerequisites */}
-          <div className="bg-gradient-to-br from-white/5 to-transparent rounded-2xl border border-white/10 p-6">
+          {/* Prerequisites Status */}
+          <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-2xl border border-emerald-500/30 p-6">
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <Shield className="w-5 h-5 text-amber-400" />
-              پیش‌نیازها
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              وضعیت پیش‌نیازها
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
-                <div className="text-2xl mb-2">🟢</div>
-                <h3 className="text-white font-bold text-sm mb-1">Node.js 18+</h3>
-                <p className="text-xs text-gray-400 mb-2">نسخه LTS پیشنهاد می‌شود</p>
-                <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
-                  node --version
-                </code>
+              <div className="bg-[#050816] rounded-xl p-4 border border-emerald-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <h3 className="text-white font-bold text-sm">Node.js ✓</h3>
+                </div>
+                <p className="text-xs text-gray-400">نصب شده و آماده</p>
               </div>
-              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
-                <div className="text-2xl mb-2">📦</div>
-                <h3 className="text-white font-bold text-sm mb-1">npm 9+</h3>
-                <p className="text-xs text-gray-400 mb-2">همراه Node.js نصب می‌شود</p>
-                <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
-                  npm --version
-                </code>
+              <div className="bg-[#050816] rounded-xl p-4 border border-emerald-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <h3 className="text-white font-bold text-sm">npm ✓</h3>
+                </div>
+                <p className="text-xs text-gray-400">نصب شده و آماده</p>
               </div>
-              <div className="bg-[#050816] rounded-xl p-4 border border-white/5">
-                <div className="text-2xl mb-2">🔀</div>
-                <h3 className="text-white font-bold text-sm mb-1">Git</h3>
-                <p className="text-xs text-gray-400 mb-2">برای کلون ریپازیتوری</p>
-                <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
-                  git --version
-                </code>
+              <div className="bg-[#050816] rounded-xl p-4 border border-emerald-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <h3 className="text-white font-bold text-sm">Git ✓</h3>
+                </div>
+                <p className="text-xs text-gray-400">نصب شده و آماده</p>
               </div>
             </div>
           </div>
@@ -821,31 +831,11 @@ export function SetupScript() {
           <div className="bg-gradient-to-br from-white/5 to-transparent rounded-2xl border border-white/10 p-6">
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <FileCode className="w-5 h-5 text-violet-400" />
-              مراحل کامل نصب
+              مراحل کامل (۳ مرحله ساده)
             </h2>
             <div className="space-y-4">
               <div className="border-r-2 border-emerald-500/30 pr-4">
-                <h3 className="text-white font-bold text-sm mb-2">مرحله ۱: نصب پیش‌نیازها</h3>
-                <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
-                  <div className="text-xs text-gray-500 mb-1">Windows (با winget):</div>
-                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
-                    winget install OpenJS.NodeJS.LTS<br/>
-                    winget install Git.Git
-                  </code>
-                  <div className="text-xs text-gray-500 mb-1 mt-3">macOS (با Homebrew):</div>
-                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
-                    brew install node git
-                  </code>
-                  <div className="text-xs text-gray-500 mb-1 mt-3">Linux (Ubuntu/Debian):</div>
-                  <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
-                    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -<br/>
-                    sudo apt-get install -y nodejs git
-                  </code>
-                </div>
-              </div>
-
-              <div className="border-r-2 border-cyan-500/30 pr-4">
-                <h3 className="text-white font-bold text-sm mb-2">مرحله ۲: کلون ریپازیتوری</h3>
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۱: کلون ریپازیتوری</h3>
                 <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
                   <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
                     git clone https://github.com/majidmk55/cloud1 abran-system<br/>
@@ -854,8 +844,8 @@ export function SetupScript() {
                 </div>
               </div>
 
-              <div className="border-r-2 border-blue-500/30 pr-4">
-                <h3 className="text-white font-bold text-sm mb-2">مرحله ۳: نصب وابستگی‌ها</h3>
+              <div className="border-r-2 border-cyan-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۲: نصب وابستگی‌ها</h3>
                 <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
                   <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
                     npm install
@@ -866,8 +856,8 @@ export function SetupScript() {
                 </div>
               </div>
 
-              <div className="border-r-2 border-violet-500/30 pr-4">
-                <h3 className="text-white font-bold text-sm mb-2">مرحله ۴: اجرای سرور توسعه</h3>
+              <div className="border-r-2 border-blue-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۳: اجرای سرور توسعه</h3>
                 <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
                   <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
                     npm run dev
@@ -878,8 +868,8 @@ export function SetupScript() {
                 </div>
               </div>
 
-              <div className="border-r-2 border-pink-500/30 pr-4">
-                <h3 className="text-white font-bold text-sm mb-2">مرحله ۵: Build برای Production (اختیاری)</h3>
+              <div className="border-r-2 border-violet-500/30 pr-4">
+                <h3 className="text-white font-bold text-sm mb-2">مرحله ۴: Build برای Production (اختیاری)</h3>
                 <div className="bg-[#050816] rounded-lg p-3 border border-white/5">
                   <code className="text-[10px] text-cyan-300 font-mono block" dir="ltr">
                     npm run build<br/>
@@ -970,10 +960,6 @@ export function SetupScript() {
             <ul className="space-y-2 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <span className="text-emerald-400 mt-1">✓</span>
-                <span>این پروژه از <strong className="text-cyan-300">Tailwind CSS v4</strong> استفاده می‌کند</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-emerald-400 mt-1">✓</span>
                 <span>مدیر بسته <strong className="text-cyan-300">npm</strong> است (نه pnpm یا yarn)</span>
               </li>
               <li className="flex items-start gap-2">
@@ -989,6 +975,18 @@ export function SetupScript() {
                 <span>اگر پورت 3000 اشغال است، Vite به صورت خودکار پورت بعدی را استفاده می‌کند</span>
               </li>
             </ul>
+          </div>
+
+          {/* Success Message */}
+          <div className="bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl border-2 border-emerald-500/40 p-6 text-center">
+            <div className="text-4xl mb-3">🎉</div>
+            <h2 className="text-xl font-bold text-emerald-300 mb-2">آماده شروع هستید!</h2>
+            <p className="text-gray-300 text-sm mb-4">فقط ۳ دستور ساده تا راه‌اندازی کامل سایت</p>
+            <div className="bg-[#050816] rounded-xl p-4 border border-white/10 inline-block">
+              <code className="text-sm text-cyan-300 font-mono block" dir="ltr">
+                git clone https://github.com/majidmk55/cloud1 && cd cloud1 && npm install && npm run dev
+              </code>
+            </div>
           </div>
         </div>
       )}
