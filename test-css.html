@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABRAN SYSTEM - تست CSS</title>
+    <style>
+        /* Tailwind CSS Base Styles */
+        *, ::before, ::after {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb;
+        }
+        
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #050816;
+            color: #e5e7eb;
+            font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Flexbox Utilities */
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        
+        /* Spacing */
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .m-4 { margin: 1rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .gap-4 { gap: 1rem; }
+        
+        /* Text */
+        .text-center { text-align: center; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .font-bold { font-weight: 700; }
+        .text-white { color: #ffffff; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-emerald-400 { color: #34d399; }
+        .text-blue-400 { color: #60a5fa; }
+        
+        /* Background */
+        .bg-gray-900 { background-color: #111827; }
+        .bg-gray-800 { background-color: #1f2937; }
+        .bg-emerald-500 { background-color: #10b981; }
+        .bg-blue-500 { background-color: #3b82f6; }
+        
+        /* Border */
+        .border { border-width: 1px; }
+        .border-gray-700 { border-color: #374151; }
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Card */
+        .card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Button */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #3b82f6;
+            color: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        /* Gradient */
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Success Message */
+        .success-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="success-box mb-6">
+            <h1 class="text-4xl font-bold gradient-text mb-4">✅ CSS کار می‌کند!</h1>
+            <p class="text-xl text-emerald-400 mb-4">اگر این صفحه با استایل نمایش داده می‌شود، یعنی CSS درست کار می‌کند</p>
+            <p class="text-gray-400">این یک فایل تست است که CSS را به صورت inline دارد</p>
+        </div>
+        
+        <div class="card">
+            <h2 class="text-2xl font-bold text-white mb-4">🎨 تست Tailwind CSS</h2>
+            <p class="text-gray-400 mb-4">این کارت با استفاده از کلاس‌های Tailwind CSS ساخته شده است</p>
+            <div class="flex gap-4">
+                <div class="bg-emerald-500 p-4 rounded-lg flex-1 text-center">
+                    <div class="text-white font-bold">سبز</div>
+                </div>
+                <div class="bg-blue-500 p-4 rounded-lg flex-1 text-center">
+                    <div class="text-white font-bold">آبی</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="text-2xl font-bold text-white mb-4">📋 اطلاعات سیستم</h2>
+            <div class="flex flex-col gap-4">
+                <div class="flex justify-between p-4 bg-gray-900 rounded">
+                    <span class="text-gray-400">وضعیت CSS:</span>
+                    <span class="text-emerald-400 font-bold">✅ فعال</span>
+                </div>
+                <div class="flex justify-between p-4 bg-gray-900 rounded">
+                    <span class="text-gray-400">فونت Vazirmatn:</span>
+                    <span class="text-emerald-400 font-bold">✅ بارگذاری شده</span>
+                </div>
+                <div class="flex justify-between p-4 bg-gray-900 rounded">
+                    <span class="text-gray-400">Tailwind CSS:</span>
+                    <span class="text-emerald-400 font-bold">✅ کار می‌کند</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-8">
+            <a href="http://localhost:3000" class="btn">بازگشت به سایت اصلی</a>
+        </div>
+    </div>
+</body>
+</html>
