@@ -1,4 +1,4 @@
-import { Page } from '../App';
+type Page = string;
 import { 
   LayoutDashboard, Globe, Puzzle, BookOpen, FolderTree, Database,
   Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart, Server, Zap, Rocket, DollarSign, Brain, BarChart3, Layers, FileSearch, Terminal

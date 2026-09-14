@@ -1,8 +1,7 @@
-import { Page } from '../App';
 import { Cloud, Zap, Shield, Globe, TrendingUp, Users, Eye, BarChart3, ArrowLeft } from 'lucide-react';
 
 interface OverviewProps {
-  onNavigate: (page: Page) => void;
+  onNavigate: (page: string) => void;
 }
 
 export function Overview({ onNavigate }: OverviewProps) {
