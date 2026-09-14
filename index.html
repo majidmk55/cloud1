@@ -21,7 +21,23 @@
         direction: ltr;
         text-align: left;
       }
+      /* Critical: ensure root is visible while loading */
+      #root { min-height: 100vh; }
     </style>
+    <script>
+      // ABRAN Runtime Error Diagnostic
+      window.__ABRAN_ERRORS__ = [];
+      window.addEventListener('error', function(e) {
+        var info = { msg: e.message, file: e.filename, line: e.lineno, col: e.colno };
+        window.__ABRAN_ERRORS__.push(info);
+        console.error('[ABRAN ERROR]', info);
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        var info = { type: 'unhandledrejection', reason: String(e.reason) };
+        window.__ABRAN_ERRORS__.push(info);
+        console.error('[ABRAN PROMISE ERROR]', info);
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

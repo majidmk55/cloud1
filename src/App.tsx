@@ -31,7 +31,7 @@ export type Page =
   | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'phase12-extensibility' | 'comprehensive-audit' | 'cicd' | 'techstack' | 'dod' | 'setup-script';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('setup-script');
+  const [currentPage, setCurrentPage] = useState<Page>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderPage = () => {
