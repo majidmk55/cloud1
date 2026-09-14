@@ -23,11 +23,12 @@ import { ComprehensiveAudit } from './pages/ComprehensiveAudit';
 import { CICD } from './pages/CICD';
 import { TechStack } from './pages/TechStack';
 import { DoD } from './pages/DoD';
+import { SetupScript } from './pages/SetupScript';
 
 export type Page =
   | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
   | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
-  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'phase12-extensibility' | 'comprehensive-audit' | 'cicd' | 'techstack' | 'dod';
+  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'phase12-extensibility' | 'comprehensive-audit' | 'cicd' | 'techstack' | 'dod' | 'setup-script';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('comprehensive-audit');
@@ -58,6 +59,7 @@ export default function App() {
       cicd: <CICD />,
       techstack: <TechStack />,
       dod: <DoD />,
+      'setup-script': <SetupScript />,
     };
     return pages[currentPage] || <ComprehensiveAudit />;
   };
