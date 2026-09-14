@@ -743,12 +743,36 @@ export function SetupScript() {
           {/* Success Banner */}
           <div className="bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-2xl border-2 border-emerald-500/40 p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/30 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/30 flex items-center justify-center animate-pulse">
                 <CheckCircle2 className="w-7 h-7 text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-emerald-300">✅ پیش‌نیازها آماده هستند!</h2>
-                <p className="text-sm text-gray-300">حالا فقط ۳ مرحله ساده تا راه‌اندازی سایت</p>
+                <h2 className="text-xl font-bold text-emerald-300">🎉 سایت با موفقیت راه‌اندازی شد!</h2>
+                <p className="text-sm text-gray-300">Vite v6.4.3 آماده است — سرور در حال اجرا</p>
+              </div>
+            </div>
+            
+            {/* Live URLs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+              <div className="bg-[#050816] rounded-xl p-4 border border-emerald-500/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                  <span className="text-xs text-emerald-400 font-bold">LOCAL</span>
+                </div>
+                <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="text-lg text-white font-mono hover:text-emerald-300 transition-colors" dir="ltr">
+                  http://localhost:3000
+                </a>
+                <p className="text-[10px] text-gray-500 mt-1">دسترسی از همین کامپیوتر</p>
+              </div>
+              <div className="bg-[#050816] rounded-xl p-4 border border-cyan-500/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+                  <span className="text-xs text-cyan-400 font-bold">NETWORK</span>
+                </div>
+                <a href="http://192.168.6.46:3000" target="_blank" rel="noopener noreferrer" className="text-lg text-white font-mono hover:text-cyan-300 transition-colors" dir="ltr">
+                  http://192.168.6.46:3000
+                </a>
+                <p className="text-[10px] text-gray-500 mt-1">دسترسی از سایر دستگاه‌ها در شبکه</p>
               </div>
             </div>
           </div>
