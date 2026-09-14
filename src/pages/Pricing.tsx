@@ -31,74 +31,74 @@ export function Pricing() {
   const estimatedPrice = (vcpu * 200000) + (ram * 50000) + (storage * 1000);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
+    <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-16">
       <SectionHeading badge="💰 تعرفه‌ها" title="پلن‌های قیمت‌گذاری" subtitle="پلن مناسب خود را انتخاب کنید" center />
 
       {/* Toggle */}
       <div className="flex items-center justify-center gap-4 mb-12">
-        <span className={`text-sm ${!isYearly ? 'text-white' : 'text-gray-500'}`}>ماهانه</span>
+        <span className={`text-sm ${!isYearly ? 'text-ink font-medium' : 'text-muted'}`}>ماهانه</span>
         <button
           onClick={() => setIsYearly(!isYearly)}
-          className={`w-14 h-7 rounded-full transition-all ${isYearly ? 'bg-blue-600' : 'bg-white/10'} relative`}
+          className={`w-14 h-7 rounded-full transition-all ${isYearly ? 'bg-primary' : 'bg-sunken'} relative`}
           aria-label="تغییر بین ماهانه و سالانه"
         >
           <div className={`w-5 h-5 rounded-full bg-white absolute top-1 transition-all ${isYearly ? 'left-1' : 'left-8'}`} />
         </button>
-        <span className={`text-sm ${isYearly ? 'text-white' : 'text-gray-500'}`}>سالانه</span>
-        {isYearly && <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs">۲ ماه رایگان</span>}
+        <span className={`text-sm ${isYearly ? 'text-ink font-medium' : 'text-muted'}`}>سالانه</span>
+        {isYearly && <span className="px-2 py-0.5 rounded-full bg-success-soft text-success text-xs">۲ ماه رایگان</span>}
       </div>
 
       {/* Cloud Plans */}
-      <h2 className="text-xl font-bold text-white mb-6 text-center">سرویس‌های ابری</h2>
+      <h2 className="text-xl font-bold text-ink mb-6 text-center">سرویس‌های ابری</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
         {cloudPlans.map((plan) => (
-          <PricingCard key={plan.name} {...plan} isYearly={isYearly} price={isYearly ? Math.round(plan.price * 10) : plan.price} period={isYearly ? 'سال' : 'ماه'} />
+          <PricingCard key={plan.name} {...plan} price={isYearly ? Math.round(plan.price * 10) : plan.price} period={isYearly ? 'سال' : 'ماه'} />
         ))}
       </div>
 
       {/* AI Plans */}
-      <h2 className="text-xl font-bold text-white mb-6 text-center">سرویس‌های هوش مصنوعی</h2>
+      <h2 className="text-xl font-bold text-ink mb-6 text-center">سرویس‌های هوش مصنوعی</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
         {aiPlans.map((plan) => (
-          <PricingCard key={plan.name} {...plan} isYearly={isYearly} price={isYearly ? Math.round(plan.price * 10) : plan.price} period={isYearly ? 'سال' : 'ماه'} />
+          <PricingCard key={plan.name} {...plan} price={isYearly ? Math.round(plan.price * 10) : plan.price} period={isYearly ? 'سال' : 'ماه'} />
         ))}
       </div>
 
       {/* Calculator */}
-      <div className="bg-[#0a0f1f] rounded-2xl border border-white/10 p-8 max-w-2xl mx-auto mb-16">
-        <h2 className="text-xl font-bold text-white mb-6 text-center">محاسبه‌گر قیمت</h2>
+      <div className="card p-8 max-w-2xl mx-auto mb-16">
+        <h2 className="text-xl font-bold text-ink mb-6 text-center">محاسبه‌گر قیمت</h2>
         <div className="space-y-6">
           <div>
             <label className="flex justify-between text-sm mb-2">
-              <span className="text-gray-400">تعداد هسته CPU</span>
-              <span className="text-white font-bold">{toFaDigits(vcpu)}</span>
+              <span className="text-muted">تعداد هسته CPU</span>
+              <span className="text-ink font-bold">{toFaDigits(vcpu)}</span>
             </label>
-            <input type="range" min="1" max="32" value={vcpu} onChange={(e) => setVcpu(Number(e.target.value))} className="w-full accent-blue-500" />
+            <input type="range" min="1" max="32" value={vcpu} onChange={(e) => setVcpu(Number(e.target.value))} className="w-full accent-primary" />
           </div>
           <div>
             <label className="flex justify-between text-sm mb-2">
-              <span className="text-gray-400">حافظه RAM (گیگابایت)</span>
-              <span className="text-white font-bold">{toFaDigits(ram)}</span>
+              <span className="text-muted">حافظه RAM (گیگابایت)</span>
+              <span className="text-ink font-bold">{toFaDigits(ram)}</span>
             </label>
-            <input type="range" min="2" max="128" step="2" value={ram} onChange={(e) => setRam(Number(e.target.value))} className="w-full accent-blue-500" />
+            <input type="range" min="2" max="128" step="2" value={ram} onChange={(e) => setRam(Number(e.target.value))} className="w-full accent-primary" />
           </div>
           <div>
             <label className="flex justify-between text-sm mb-2">
-              <span className="text-gray-400">فضای ذخیره‌سازی (گیگابایت)</span>
-              <span className="text-white font-bold">{toFaDigits(storage)}</span>
+              <span className="text-muted">فضای ذخیره‌سازی (گیگابایت)</span>
+              <span className="text-ink font-bold">{toFaDigits(storage)}</span>
             </label>
-            <input type="range" min="40" max="1000" step="10" value={storage} onChange={(e) => setStorage(Number(e.target.value))} className="w-full accent-blue-500" />
+            <input type="range" min="40" max="1000" step="10" value={storage} onChange={(e) => setStorage(Number(e.target.value))} className="w-full accent-primary" />
           </div>
-          <div className="text-center pt-4 border-t border-white/10">
-            <p className="text-gray-400 text-sm mb-2">قیمت تخمینی ماهانه</p>
-            <p className="text-4xl font-black text-white">{toFaDigits(estimatedPrice.toLocaleString('en-US').replace(/,/g, '٬'))} <span className="text-lg text-gray-400">تومان</span></p>
+          <div className="text-center pt-4 border-t border-border">
+            <p className="text-muted text-sm mb-2">قیمت تخمینی ماهانه</p>
+            <p className="text-4xl font-black text-ink">{toFaDigits(estimatedPrice.toLocaleString('en-US').replace(/,/g, '٬'))} <span className="text-lg text-muted">تومان</span></p>
           </div>
         </div>
       </div>
 
       {/* FAQ */}
       <div className="max-w-2xl mx-auto mb-16">
-        <h2 className="text-xl font-bold text-white mb-6 text-center">سوالات متداول تعرفه‌ها</h2>
+        <h2 className="text-xl font-bold text-ink mb-6 text-center">سوالات متداول تعرفه‌ها</h2>
         <FaqAccordion items={pricingFaq} />
       </div>
     </div>

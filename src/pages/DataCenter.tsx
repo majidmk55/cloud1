@@ -10,8 +10,8 @@ export function DataCenter() {
 
       {/* Facility Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <div className="bg-[#0a0f1f] rounded-2xl border border-white/10 p-8">
-          <h3 className="text-xl font-bold text-white mb-4">مشخصات دیتاسنتر</h3>
+        <div className="card p-8">
+          <h3 className="text-xl font-bold text-ink mb-4">مشخصات دیتاسنتر</h3>
           <div className="space-y-3">
             {[
               ['رتبه‌بندی', 'Tier III'],
@@ -21,15 +21,15 @@ export function DataCenter() {
               ['اتصال شبکه', '۴۰ گیگابیت'],
               ['موقعیت', 'تهران، ایران'],
             ].map(([k, v]) => (
-              <div key={k} className="flex justify-between py-2 border-b border-white/5">
-                <span className="text-gray-400">{k}</span>
-                <span className="text-white font-medium">{v}</span>
+              <div key={k} className="flex justify-between py-2 border-b border-border">
+                <span className="text-muted">{k}</span>
+                <span className="text-ink font-medium">{v}</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="bg-[#0a0f1f] rounded-2xl border border-white/10 p-8">
-          <h3 className="text-xl font-bold text-white mb-4">گواهینامه‌ها</h3>
+        <div className="card p-8">
+          <h3 className="text-xl font-bold text-ink mb-4">گواهینامه‌ها</h3>
           <div className="space-y-4">
             {[
               { name: 'Tier III Certified', desc: 'طراحی و عملیات مطابق استاندارد Uptime Institute' },
@@ -38,10 +38,10 @@ export function DataCenter() {
               { name: 'افتا', desc: 'مطابق الزامات مرکز افتای جمهوری اسلامی ایران' },
             ].map((cert) => (
               <div key={cert.name} className="flex items-start gap-3">
-                <span className="text-emerald-400 mt-1">✓</span>
+                <span className="text-success mt-1">✓</span>
                 <div>
-                  <div className="text-white font-medium text-sm">{cert.name}</div>
-                  <div className="text-gray-500 text-xs">{cert.desc}</div>
+                  <div className="text-ink font-medium text-sm">{cert.name}</div>
+                  <div className="text-muted text-xs">{cert.desc}</div>
                 </div>
               </div>
             ))}

@@ -65,27 +65,27 @@ export function AI() {
 
       {/* Playground */}
       <div className="mb-20">
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">🎮 محیط آزمایشی</h2>
-        <div className="bg-[#0a0f1f] rounded-2xl border border-white/10 p-6 max-w-3xl mx-auto">
-          <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mb-4">
-            <p className="text-amber-400 text-xs text-center">⚠️ این محیط نمایشی است. پاسخ‌ها شبیه‌سازی شده‌اند.</p>
+        <h2 className="text-2xl font-bold text-ink mb-6 text-center">🎮 محیط آزمایشی</h2>
+        <div className="card p-6 max-w-3xl mx-auto">
+          <div className="bg-warn-soft border border-warn/20 rounded-lg p-3 mb-4">
+            <p className="text-warn text-xs text-center">⚠️ این محیط نمایشی است. پاسخ‌ها شبیه‌سازی شده‌اند.</p>
           </div>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="سوال خود را به فارسی بنویسید..."
-            className="w-full bg-[#050816] border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 resize-none h-24 mb-4 focus:outline-none focus:border-blue-500/50"
+            className="w-full bg-bg border border-border rounded-xl p-4 text-ink placeholder-faint resize-none h-24 mb-4 focus:outline-none focus:border-primary"
           />
           <button
             onClick={handleRun}
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-l from-blue-600 to-purple-600 text-white font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all disabled:opacity-50"
+            className="w-full py-3 rounded-xl btn-primary transition-all disabled:opacity-50"
           >
             {loading ? 'در حال پردازش...' : 'اجرا'}
           </button>
           {response && (
-            <div className="mt-4 bg-[#050816] rounded-xl p-4 border border-white/5">
-              <pre className="text-gray-300 text-sm whitespace-pre-wrap font-sans leading-relaxed">{response}</pre>
+            <div className="mt-4 bg-surface rounded-xl p-4 border border-border">
+              <pre className="text-ink text-sm whitespace-pre-wrap font-sans leading-relaxed">{response}</pre>
             </div>
           )}
         </div>
