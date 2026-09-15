@@ -6,6 +6,7 @@ interface Node {
   vx: number;
   vy: number;
   size: number;
+  pulse: number;
 }
 
 export function HeroBackground() {
@@ -25,21 +26,22 @@ export function HeroBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Create nodes for digital cloud mesh (50% larger)
+    // Create nodes for enlarged digital cloud mesh (50% larger)
     const nodes: Node[] = [];
-    const nodeCount = 120;
+    const nodeCount = 150; // Increased for larger cloud
     const cloudCenterX = canvas.width / 2;
-    const cloudCenterY = canvas.height / 2 - 100; // Positioned in upper center
+    const cloudCenterY = canvas.height / 2 - 50;
 
     for (let i = 0; i < nodeCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 300 + 150; // 50% larger
+      const radius = Math.random() * 350 + 180; // 50% larger (was 300+150)
       nodes.push({
         x: cloudCenterX + Math.cos(angle) * radius,
         y: cloudCenterY + Math.sin(angle) * radius * 0.6,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        size: Math.random() * 2 + 1,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        size: Math.random() * 2.5 + 1,
+        pulse: Math.random() * Math.PI * 2,
       });
     }
 
@@ -47,11 +49,10 @@ export function HeroBackground() {
     let frame = 0;
 
     const animate = () => {
-      // Clear canvas with transparency
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       frame++;
 
-      // Draw network mesh (nodes and lines)
+      // Draw network mesh
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
         
@@ -64,7 +65,7 @@ export function HeroBackground() {
         const dy = node.y - cloudCenterY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist > 375) {
+        if (dist > 450) { // 50% larger boundary
           node.vx *= -0.5;
           node.vy *= -0.5;
         }
@@ -76,14 +77,13 @@ export function HeroBackground() {
             Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2)
           );
           
-          if (d < 150) {
-            // Cyan gradient for lines
+          if (d < 180) { // Increased connection distance
             const gradient = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
-            gradient.addColorStop(0, `rgba(0, 212, 255, ${(1 - d / 150) * 0.4})`);
-            gradient.addColorStop(1, `rgba(10, 22, 40, ${(1 - d / 150) * 0.2})`);
+            gradient.addColorStop(0, `rgba(0, 212, 255, ${(1 - d / 180) * 0.5})`);
+            gradient.addColorStop(1, `rgba(10, 22, 40, ${(1 - d / 180) * 0.3})`);
             
             ctx.strokeStyle = gradient;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(other.x, other.y);
@@ -91,14 +91,16 @@ export function HeroBackground() {
           }
         }
 
-        // Draw node with glow effect
-        const glowRadius = node.size * 3;
+        // Draw node with pulsing glow
+        const pulseSize = node.size * (1 + Math.sin(frame * 0.02 + node.pulse) * 0.3);
+        const glowRadius = pulseSize * 4;
+        
         const nodeGradient = ctx.createRadialGradient(
           node.x, node.y, 0,
           node.x, node.y, glowRadius
         );
-        nodeGradient.addColorStop(0, `rgba(0, 212, 255, ${0.8 + Math.sin(frame * 0.02 + i) * 0.2})`);
-        nodeGradient.addColorStop(0.5, 'rgba(0, 212, 255, 0.3)');
+        nodeGradient.addColorStop(0, `rgba(0, 212, 255, ${0.9 + Math.sin(frame * 0.02 + node.pulse) * 0.1})`);
+        nodeGradient.addColorStop(0.4, 'rgba(0, 212, 255, 0.4)');
         nodeGradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
         
         ctx.fillStyle = nodeGradient;
@@ -109,33 +111,33 @@ export function HeroBackground() {
         // Draw core node
         ctx.fillStyle = '#00d4ff';
         ctx.beginPath();
-        ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, pulseSize, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // Draw AI Core (central glowing orb)
-      const orbRadius = 75 + Math.sin(frame * 0.02) * 5;
+      // Draw AI Orb (central glowing sphere)
+      const orbRadius = 90 + Math.sin(frame * 0.015) * 8; // 50% larger
       const orbX = cloudCenterX;
       const orbY = cloudCenterY;
 
       // Outer glow
-      const outerGlow = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbRadius * 3);
-      outerGlow.addColorStop(0, 'rgba(0, 212, 255, 0.3)');
-      outerGlow.addColorStop(0.5, 'rgba(0, 212, 255, 0.1)');
+      const outerGlow = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbRadius * 3.5);
+      outerGlow.addColorStop(0, 'rgba(0, 212, 255, 0.4)');
+      outerGlow.addColorStop(0.5, 'rgba(0, 212, 255, 0.15)');
       outerGlow.addColorStop(1, 'rgba(0, 212, 255, 0)');
       
       ctx.fillStyle = outerGlow;
       ctx.beginPath();
-      ctx.arc(orbX, orbY, orbRadius * 3, 0, Math.PI * 2);
+      ctx.arc(orbX, orbY, orbRadius * 3.5, 0, Math.PI * 2);
       ctx.fill();
 
       // Orb rings
-      for (let i = 0; i < 3; i++) {
-        const ringRadius = orbRadius + 20 + i * 15;
-        const ringOpacity = 0.4 - i * 0.1;
+      for (let i = 0; i < 4; i++) {
+        const ringRadius = orbRadius + 25 + i * 20;
+        const ringOpacity = 0.5 - i * 0.1;
         
         ctx.strokeStyle = `rgba(0, 212, 255, ${ringOpacity})`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.arc(orbX, orbY, ringRadius, 0, Math.PI * 2);
         ctx.stroke();
@@ -143,9 +145,9 @@ export function HeroBackground() {
 
       // Orb core with gradient
       const orbGradient = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbRadius);
-      orbGradient.addColorStop(0, 'rgba(0, 212, 255, 0.9)');
-      orbGradient.addColorStop(0.5, 'rgba(0, 212, 255, 0.5)');
-      orbGradient.addColorStop(1, 'rgba(10, 22, 40, 0.3)');
+      orbGradient.addColorStop(0, 'rgba(0, 212, 255, 1)');
+      orbGradient.addColorStop(0.5, 'rgba(0, 212, 255, 0.6)');
+      orbGradient.addColorStop(1, 'rgba(10, 22, 40, 0.4)');
       
       ctx.fillStyle = orbGradient;
       ctx.beginPath();
@@ -155,14 +157,14 @@ export function HeroBackground() {
       // Inner highlight
       const highlightGradient = ctx.createRadialGradient(
         orbX - orbRadius * 0.3, orbY - orbRadius * 0.3, 0,
-        orbX, orbY, orbRadius * 0.6
+        orbX, orbY, orbRadius * 0.7
       );
-      highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+      highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
       highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
       
       ctx.fillStyle = highlightGradient;
       ctx.beginPath();
-      ctx.arc(orbX, orbY, orbRadius * 0.6, 0, Math.PI * 2);
+      ctx.arc(orbX, orbY, orbRadius * 0.7, 0, Math.PI * 2);
       ctx.fill();
 
       animationId = requestAnimationFrame(animate);
@@ -178,11 +180,11 @@ export function HeroBackground() {
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden">
-      {/* Sky gradient background */}
+      {/* Deep blue gradient background */}
       <div 
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to bottom, #1E90FF 0%, #4facfe 50%, #87CEEB 100%)'
+          background: 'linear-gradient(180deg, #0a1628 0%, #1a3a6c 50%, #0d2137 100%)'
         }}
       />
       
@@ -191,22 +193,8 @@ export function HeroBackground() {
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
         style={{ 
-          opacity: 0.7,
+          opacity: 0.85,
           mixBlendMode: 'screen'
-        }}
-      />
-      
-      {/* Soft cloud overlay for depth */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 60% 40% at 25% 35%, rgba(255,255,255,0.3) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 35% at 75% 30%, rgba(255,255,255,0.25) 0%, transparent 50%),
-            radial-gradient(ellipse 70% 45% at 50% 65%, rgba(255,255,255,0.35) 0%, transparent 50%)
-          `,
-          filter: 'blur(10px)',
-          pointerEvents: 'none'
         }}
       />
     </div>
