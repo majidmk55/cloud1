@@ -147,3 +147,36 @@
     }
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   NAVBAR - Products Link (Pure White with Cyan Glow)
+   ═══════════════════════════════════════════════════════════ */
+.nav-link-products {
+  color: #ffffff !important;
+  transition: all 200ms ease;
+}
+
+.nav-link-products:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.nav-link-products:active,
+.nav-link-products:focus {
+  color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN ACCESS - Discreet Footer Link
+   ═══════════════════════════════════════════════════════════ */
+.admin-access-link {
+  color: #888888;
+  opacity: 0.5;
+  transition: all 300ms ease;
+  font-size: 11px;
+}
+
+.admin-access-link:hover {
+  color: #ffffff;
+  opacity: 1;
+}

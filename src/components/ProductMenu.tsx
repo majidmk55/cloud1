@@ -9,11 +9,11 @@ export function ProductMegaMenu() {
 
   return (
     <div className="relative">
-      {/* Desktop Mega Menu Trigger */}
+      {/* Desktop Mega Menu Trigger - Pure White with Cyan Glow on Hover */}
       <button
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
-        className="flex items-center gap-1 text-[#0a192f] hover:text-[#1E90FF] transition-colors font-medium"
+        className="nav-link-products flex items-center gap-1 font-medium"
       >
         محصولات
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />

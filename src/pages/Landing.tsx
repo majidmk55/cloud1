@@ -4,12 +4,27 @@ import { Cloud, Cpu, Shield, BarChart3, Mail, Phone, MapPin } from 'lucide-react
 import { HeroBackground } from '../components/HeroBackground';
 import { ProductMegaMenu, MobileMenu } from '../components/ProductMenu';
 
+import { AdminLoginModal } from '../components/AdminLoginModal';
+
 export function Landing() {
   const [isVisible, setIsVisible] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsVisible(true);
+  }, []);
+
+  // Keyboard shortcut for admin access (Ctrl+Shift+A)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setAdminModalOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Animated counter
@@ -379,11 +394,25 @@ export function Landing() {
             </div>
           </div>
 
-          <div className="border-t border-[#00d4ff]/10 pt-8 text-center text-gray-400">
-            <p>© ۱۴۰۳ ابران سیستم. تمامی حقوق محفوظ است.</p>
+          <div className="border-t border-[#00d4ff]/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-gray-400 text-sm">© ۱۴۰۳ ابران سیستم. تمامی حقوق محفوظ است.</p>
+            
+            {/* Discreet Admin Access Link */}
+            <button
+              onClick={() => setAdminModalOpen(true)}
+              className="admin-access-link"
+            >
+              سامانه مدیریت
+            </button>
           </div>
         </div>
       </footer>
+
+      {/* Admin Login Modal */}
+      <AdminLoginModal
+        isOpen={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+      />
     </div>
   );
 }
