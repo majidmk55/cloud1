@@ -1,16 +1,5 @@
 import { useEffect, useRef } from 'react';
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  size: number;
-  opacity: number;
-  life: number;
-  maxLife: number;
-}
-
 interface Node {
   x: number;
   y: number;
@@ -37,15 +26,15 @@ export function HeroBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Create nodes for cloud mesh
+    // Create nodes for cloud mesh (50% larger)
     const nodes: Node[] = [];
-    const nodeCount = 80;
+    const nodeCount = 120; // Increased for larger cloud
     const cloudCenterX = canvas.width / 2;
     const cloudCenterY = canvas.height / 2 - 50;
 
     for (let i = 0; i < nodeCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 200 + 100;
+      const radius = Math.random() * 300 + 150; // 50% larger (was 200+100)
       nodes.push({
         x: cloudCenterX + Math.cos(angle) * radius,
         y: cloudCenterY + Math.sin(angle) * radius * 0.6,
@@ -55,27 +44,7 @@ export function HeroBackground() {
       });
     }
 
-    // Create particles
-    const particles: Particle[] = [];
-    const maxParticles = 100;
-
-    const createParticle = () => {
-      if (particles.length >= maxParticles) return;
-      
-      const startX = cloudCenterX + (Math.random() - 0.5) * 300;
-      const startY = cloudCenterY + 100;
-      
-      particles.push({
-        x: startX,
-        y: startY,
-        vx: (Math.random() - 0.5) * 1,
-        vy: -Math.random() * 2 - 1,
-        size: Math.random() * 3 + 1,
-        opacity: 1,
-        life: 0,
-        maxLife: Math.random() * 100 + 100,
-      });
-    };
+    // Particles removed for cleaner look
 
     // Animation loop
     let animationId: number;
@@ -98,28 +67,28 @@ export function HeroBackground() {
         node.x += node.vx;
         node.y += node.vy;
 
-        // Bounce back if too far
+        // Bounce back if too far (increased for larger cloud)
         const dx = node.x - cloudCenterX;
         const dy = node.y - cloudCenterY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist > 250) {
+        if (dist > 375) { // Increased from 250 to 375 (50% larger)
           node.vx *= -0.5;
           node.vy *= -0.5;
         }
 
-        // Draw connections
+        // Draw connections (increased distance for larger cloud)
         for (let j = i + 1; j < nodes.length; j++) {
           const other = nodes[j];
           const d = Math.sqrt(
             Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2)
           );
           
-          if (d < 100) {
+          if (d < 150) { // Increased from 100 to 150
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(other.x, other.y);
-            ctx.globalAlpha = (1 - d / 100) * 0.3;
+            ctx.globalAlpha = (1 - d / 150) * 0.3;
             ctx.stroke();
             ctx.globalAlpha = 1;
           }
@@ -134,44 +103,10 @@ export function HeroBackground() {
         ctx.globalAlpha = 1;
       }
 
-      // Create new particles
-      if (frame % 3 === 0) {
-        createParticle();
-      }
+      // Particles removed - cleaner, more minimal look
 
-      // Draw and update particles
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life++;
-        p.opacity = 1 - p.life / p.maxLife;
-
-        if (p.life >= p.maxLife) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        // Draw particle
-        ctx.fillStyle = '#00d4ff';
-        ctx.globalAlpha = p.opacity * 0.8;
-        
-        if (Math.random() > 0.5) {
-          // Circle
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          // Square
-          ctx.fillRect(p.x - p.size, p.y - p.size, p.size * 2, p.size * 2);
-        }
-        
-        ctx.globalAlpha = 1;
-      }
-
-      // Draw AI orb
-      const orbRadius = 60 + Math.sin(frame * 0.02) * 5;
+      // Draw AI orb (slightly larger to match bigger cloud)
+      const orbRadius = 75 + Math.sin(frame * 0.02) * 5; // Increased from 60 to 75
       const orbX = cloudCenterX;
       const orbY = cloudCenterY;
 
