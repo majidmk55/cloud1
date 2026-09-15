@@ -101,36 +101,23 @@ export function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative min-h-screen flex items-center justify-center pt-20">
+      <section id="home" className="relative min-h-screen pt-20">
         <HeroBackground />
         
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        {/* CTA Buttons at bottom */}
+        <div className="absolute bottom-16 left-0 right-0 z-10 flex justify-center px-6">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4"
           >
-            <h1 className="text-6xl md:text-8xl font-black mb-6 text-[#0a1628] drop-shadow-lg">
-              ابران سیستم
-            </h1>
-            
-            <h2 className="text-2xl md:text-3xl text-[#1a3a6c] mb-6 font-light">
-              راهکارهای هوشمند ابری و هوش مصنوعی
-            </h2>
-            
-            <p className="text-lg md:text-xl text-[#0a1628]/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-              ابران سیستم ارائه‌دهنده خدمات ابری پیشرفته و راهکارهای هوش مصنوعی برای کسب‌وکارهای مدرن است.
-              با ما آینده دیجیتال خود را بسازید.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-[#0a1628] text-white rounded-lg font-bold text-lg hover:bg-[#1a3a6c] transition-all shadow-xl hover:shadow-2xl">
-                مشاوره رایگان
-              </button>
-              <button className="px-8 py-4 bg-white text-[#0a1628] rounded-lg font-bold text-lg hover:bg-gray-50 transition-all shadow-xl border-2 border-[#0a1628]/10">
-                اطلاعات بیشتر
-              </button>
-            </div>
+            <button className="px-8 py-4 bg-[#0a1628] text-white rounded-lg font-bold text-lg hover:bg-[#1a3a6c] transition-all shadow-xl hover:shadow-2xl">
+              مشاوره رایگان
+            </button>
+            <button className="px-8 py-4 bg-white text-[#0a1628] rounded-lg font-bold text-lg hover:bg-gray-50 transition-all shadow-xl border-2 border-[#0a1628]/10">
+              اطلاعات بیشتر
+            </button>
           </motion.div>
         </div>
       </section>
