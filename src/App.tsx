@@ -6,6 +6,7 @@ import { AuthProvider } from './lib/auth';
 import { ErrorBoundary } from './components/ui';
 
 // Lazy-loaded public pages
+const Landing = lazy(() => import('./pages/Landing').then(m => ({ default: m.Landing })));
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const Services = lazy(() => import('./pages/Services').then(m => ({ default: m.Services })));
 const AI = lazy(() => import('./pages/AI').then(m => ({ default: m.AI })));
@@ -43,9 +44,12 @@ export default function App() {
         <BrowserRouter>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
+              {/* Landing Page - Modern Dark Theme */}
+              <Route path="/" element={<Landing />} />
+
               {/* Public Website */}
               <Route element={<PublicLayout />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/ai" element={<AI />} />
                 <Route path="/datacenter" element={<DataCenter />} />
