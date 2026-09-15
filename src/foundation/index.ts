@@ -376,3 +376,30 @@ export class CMKKeyManager {
     console.log(`[CMK] Revoking CMK for tenant: ${tenantId} (crypto-shredding)`);
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// MODULE 10: MULTI-REGION INFRASTRUCTURE
+// ═══════════════════════════════════════════════════════════
+
+export {
+  regionRegistry,
+  trafficSteeringEngine,
+  regionHealthMonitor,
+  failoverStateMachine,
+  DataResidencyEnforcer,
+  CrossBorderTransferValidator,
+  RegionAdapterFactory,
+  GeoObservability,
+} from './geo-infrastructure';
+
+export type {
+  RegionConfig,
+  RegionCode,
+  RegionStatus,
+  SteeringContext,
+  SteeringDecision,
+  HealthState,
+  IRegionAdapter,
+  ResourceSpecs,
+  ResourceHandle,
+} from './geo-infrastructure';

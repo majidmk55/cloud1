@@ -255,3 +255,100 @@ INSERT INTO tenant_quotas (tenant_id, max_vps, max_gpu, max_storage_tb) VALUES
 -- Sample backup manifest
 INSERT INTO backup_manifests (tenant_id, resource_type, backup_type, s3_key, region, immutable_until) VALUES
   ('00000000-0000-0000-0000-000000000001', 'POSTGRES', 'FULL', 'backups/tenant-1/2026-01-15/full.dump', 'PRIMARY', NOW() + INTERVAL '30 days');
+
+-- ═══════════════════════════════════════════════════════════
+-- GEO-AWARE TABLES (Multi-Region Infrastructure)
+-- ═══════════════════════════════════════════════════════════
+
+-- Region Configuration
+CREATE TABLE geo_regions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code VARCHAR(10) UNIQUE NOT NULL, -- IR, EU, US, ASIA
+  name VARCHAR(255) NOT NULL,
+  flag VARCHAR(10),
+  status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, DEGRADED, OFFLINE, PLANNED
+  compliance JSONB NOT NULL,
+  infrastructure JSONB NOT NULL,
+  endpoints JSONB NOT NULL,
+  capacity JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT chk_region_status CHECK (status IN ('ACTIVE', 'DEGRADED', 'OFFLINE', 'PLANNED'))
+);
+
+CREATE INDEX idx_geo_region_code ON geo_regions(code);
+CREATE INDEX idx_geo_region_status ON geo_regions(status);
+
+-- Initialize regions
+INSERT INTO geo_regions (code, name, flag, status, compliance, infrastructure, endpoints, capacity) VALUES
+  ('IR', 'Iran Datacenter (DC-A)', '🇮🇷', 'ACTIVE',
+   '{"dataResidency": "STRICT_LOCAL", "sanctionsRisk": "HIGH", "crossBorderAllowed": false, "gdprCompliant": false}',
+   '{"k8sProvider": "RKE2", "virtualization": ["KubeVirt", "KVM"], "storageClass": ["local-ssd", "ceph-block"], "networkProvider": "calico"}',
+   '{"apiGateway": "https://api.ir.abran.system", "metricsExporter": "http://metrics.ir.abran.system:9090", "backupTarget": "s3://backup-ir.abran.system"}',
+   '{"maxVps": 500, "maxGpu": 50, "currentUtilization": 0.65}'),
+  ('EU', 'Europe Datacenter (DC-B)', '🇪🇺', 'ACTIVE',
+   '{"dataResidency": "GDPR", "sanctionsRisk": "LOW", "crossBorderAllowed": true, "gdprCompliant": true}',
+   '{"k8sProvider": "RKE2", "virtualization": ["KubeVirt", "VMware"], "storageClass": ["ebs-gp3", "ceph-block"], "networkProvider": "cilium"}',
+   '{"apiGateway": "https://api.eu.abran.system", "metricsExporter": "http://metrics.eu.abran.system:9090", "backupTarget": "s3://backup-eu.abran.system"}',
+   '{"maxVps": 1000, "maxGpu": 200, "currentUtilization": 0.45}'),
+  ('ASIA', 'Asia Datacenter (DC-C)', '🌏', 'PLANNED',
+   '{"dataResidency": "CONFIGURABLE", "sanctionsRisk": "MEDIUM", "crossBorderAllowed": true, "gdprCompliant": false}',
+   '{"k8sProvider": "EKS", "virtualization": ["KubeVirt"], "storageClass": ["ebs-gp3"], "networkProvider": "cilium"}',
+   '{"apiGateway": "https://api.asia.abran.system", "metricsExporter": "http://metrics.asia.abran.system:9090", "backupTarget": "s3://backup-asia.abran.system"}',
+   '{"maxVps": 800, "maxGpu": 150, "currentUtilization": 0}');
+
+-- Geo Failover Events
+CREATE TABLE geo_failover_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  region_code VARCHAR(10) NOT NULL,
+  event_type VARCHAR(50) NOT NULL, -- DEGRADE, FAIL, RECOVER, FAILOVER_TRIGGERED
+  previous_state VARCHAR(20),
+  new_state VARCHAR(20),
+  triggered_by VARCHAR(50), -- SYSTEM, ADMIN, HEALTH_CHECK
+  affected_resources INTEGER DEFAULT 0,
+  migration_initiated BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT chk_failover_event_type CHECK (event_type IN ('DEGRADE', 'FAIL', 'RECOVER', 'FAILOVER_TRIGGERED'))
+);
+
+CREATE INDEX idx_failover_region ON geo_failover_events(region_code);
+CREATE INDEX idx_failover_time ON geo_failover_events(created_at);
+
+-- Cross-Border Transfer Logs
+CREATE TABLE cross_border_transfer_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source_region VARCHAR(10) NOT NULL,
+  target_region VARCHAR(10) NOT NULL,
+  tenant_id UUID NOT NULL,
+  resource_id UUID,
+  transfer_type VARCHAR(50) NOT NULL, -- MIGRATION, REPLICATION, BACKUP
+  admin_override BOOLEAN DEFAULT false,
+  compliance_check_passed BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT chk_transfer_type CHECK (transfer_type IN ('MIGRATION', 'REPLICATION', 'BACKUP'))
+);
+
+CREATE INDEX idx_cross_border_regions ON cross_border_transfer_logs(source_region, target_region);
+CREATE INDEX idx_cross_border_tenant ON cross_border_transfer_logs(tenant_id);
+CREATE INDEX idx_cross_border_time ON cross_border_transfer_logs(created_at);
+
+-- Latency Probe Results
+CREATE TABLE latency_probe_results (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  from_region VARCHAR(10) NOT NULL,
+  to_region VARCHAR(10) NOT NULL,
+  latency_ms INTEGER NOT NULL,
+  probe_timestamp TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT chk_latency_positive CHECK (latency_ms >= 0)
+);
+
+CREATE INDEX idx_latency_regions ON latency_probe_results(from_region, to_region);
+CREATE INDEX idx_latency_time ON latency_probe_results(probe_timestamp);
+
+-- Resources with Region Awareness
+ALTER TABLE IF EXISTS resources ADD COLUMN IF NOT EXISTS region_code VARCHAR(10);
+CREATE INDEX IF NOT EXISTS idx_resources_region ON resources(region_code);
