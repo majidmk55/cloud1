@@ -1,89 +1,193 @@
-import { useAuth } from '../../lib/auth';
-import { TrendingUp, Users, Server, DollarSign, AlertCircle, CheckCircle } from 'lucide-react';
+import { Server, TrendingUp, DollarSign, Users, GitBranch, Activity } from 'lucide-react';
+import { dashboardMetrics, providers, migrations } from '../../data/admin-data';
+import { toFaDigits, formatToman } from '../../lib/utils';
 
 export function AdminDashboard() {
-  const { user } = useAuth();
-
-  const stats = [
-    { label: 'درآمد ماهانه', value: '۱۲۴,۵۰۰,۰۰۰', unit: 'تومان', icon: DollarSign, color: 'text-success', bg: 'bg-success-soft' },
-    { label: 'مشتریان فعال', value: '۱,۲۴۸', unit: '', icon: Users, color: 'text-primary', bg: 'bg-primary-soft' },
-    { label: 'سرویس‌های فعال', value: '۳,۴۵۶', unit: '', icon: Server, color: 'text-accent', bg: 'bg-accent-soft' },
-    { label: 'رشد ماهانه', value: '۱۲.۵', unit: '٪', icon: TrendingUp, color: 'text-success', bg: 'bg-success-soft' },
-  ];
-
-  const alerts = [
-    { type: 'warning', message: '۳ فاکتور overdue نیاز به پیگیری دارد', time: '۲ ساعت پیش' },
-    { type: 'success', message: 'پرداخت ۱۲,۵۰۰,۰۰۰ تومان از شرکت دیجی‌کالا دریافت شد', time: '۵ ساعت پیش' },
-    { type: 'info', message: 'سرور جدید در دیتاسنتر تهران ۲ فعال شد', time: '۱ روز پیش' },
-  ];
+  const internalProviders = providers.filter(p => p.type === 'INTERNAL');
+  const localProviders = providers.filter(p => p.type === 'LOCAL_EXTERNAL');
+  const intlProviders = providers.filter(p => p.type === 'INTL_EXTERNAL');
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-ink">داشبورد</h1>
-        <p className="text-body text-sm mt-1">خوش آمدید، {user?.name}</p>
+        <h1 className="text-2xl font-bold text-white">داشبورد مدیریت</h1>
+        <p className="text-gray-400 text-sm mt-1">نمای کلی زیرساخت سه‌گانه</p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, i) => {
-          const Icon = stat.icon;
-          return (
-            <div key={i} className="card p-5">
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 ${stat.color}`} />
-                </div>
+      {/* Provider Health Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Internal Infrastructure */}
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                <Server className="w-5 h-5 text-green-400" />
               </div>
-              <div className="text-2xl font-bold text-ink">
-                {stat.value}
-                {stat.unit && <span className="text-sm text-muted mr-1">{stat.unit}</span>}
+              <div>
+                <h3 className="text-sm font-bold text-white">زیرساخت داخلی</h3>
+                <p className="text-xs text-gray-400">On-Premise</p>
               </div>
-              <div className="text-sm text-muted mt-1">{stat.label}</div>
             </div>
-          );
-        })}
-      </div>
+            <div className="text-2xl font-bold text-green-400">
+              {toFaDigits(dashboardMetrics.providerHealth.internal)}%
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">ارائه‌دهندگان</span>
+              <span className="text-white">{toFaDigits(internalProviders.length)}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">منابع</span>
+              <span className="text-white">{toFaDigits(internalProviders.reduce((sum, p) => sum + p.resourceCount, 0))}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">هزینه ماهانه</span>
+              <span className="text-white">مالکیت داخلی</span>
+            </div>
+          </div>
+        </div>
 
-      {/* Alerts */}
-      <div className="card p-5">
-        <h2 className="text-lg font-bold text-ink mb-4">اعلان‌های اخیر</h2>
-        <div className="space-y-3">
-          {alerts.map((alert, i) => {
-            const Icon = alert.type === 'warning' ? AlertCircle : CheckCircle;
-            const color = alert.type === 'warning' ? 'text-warn' : alert.type === 'success' ? 'text-success' : 'text-primary';
-            return (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-sunken">
-                <Icon className={`w-5 h-5 ${color} flex-shrink-0 mt-0.5`} />
-                <div className="flex-1">
-                  <div className="text-sm text-ink">{alert.message}</div>
-                  <div className="text-xs text-muted mt-1">{alert.time}</div>
-                </div>
+        {/* Local External */}
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                <Server className="w-5 h-5 text-blue-400" />
               </div>
-            );
-          })}
+              <div>
+                <h3 className="text-sm font-bold text-white">خارجی داخلی</h3>
+                <p className="text-xs text-gray-400">Local Datacenters</p>
+              </div>
+            </div>
+            <div className="text-2xl font-bold text-blue-400">
+              {toFaDigits(dashboardMetrics.providerHealth.local)}%
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">ارائه‌دهندگان</span>
+              <span className="text-white">{toFaDigits(localProviders.length)}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">منابع</span>
+              <span className="text-white">{toFaDigits(localProviders.reduce((sum, p) => sum + p.resourceCount, 0))}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">هزینه ماهانه</span>
+              <span className="text-white">{formatToman(500000000)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* International External */}
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                <Server className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">بین‌الملل</h3>
+                <p className="text-xs text-gray-400">International DCs</p>
+              </div>
+            </div>
+            <div className="text-2xl font-bold text-purple-400">
+              {toFaDigits(dashboardMetrics.providerHealth.international)}%
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">ارائه‌دهندگان</span>
+              <span className="text-white">{toFaDigits(intlProviders.length)}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">منابع</span>
+              <span className="text-white">{toFaDigits(intlProviders.reduce((sum, p) => sum + p.resourceCount, 0))}</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">هزینه ماهانه</span>
+              <span className="text-white" dir="ltr">$16,000</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="card p-5">
-        <h2 className="text-lg font-bold text-ink mb-4">دسترسی سریع</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: 'مشتریان جدید', href: '/admin/customers' },
-            { label: 'فاکتورها', href: '/admin/finance' },
-            { label: 'گزارش‌ها', href: '/admin/reports' },
-            { label: 'تنظیمات', href: '/admin/settings' },
-          ].map((action, i) => (
-            <a
-              key={i}
-              href={action.href}
-              className="p-4 rounded-lg bg-sunken hover:bg-primary-soft transition-colors text-center"
-            >
-              <div className="text-sm font-medium text-ink">{action.label}</div>
-            </a>
+      {/* Key Metrics */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Activity className="w-4 h-4 text-blue-400" />
+            <span className="text-xs text-gray-400">منابع فعال</span>
+          </div>
+          <div className="text-2xl font-bold text-white">
+            {toFaDigits(dashboardMetrics.runningResources)}
+            <span className="text-sm text-gray-400 mr-1">/ {toFaDigits(dashboardMetrics.totalResources)}</span>
+          </div>
+        </div>
+
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Users className="w-4 h-4 text-green-400" />
+            <span className="text-xs text-gray-400">مشتریان</span>
+          </div>
+          <div className="text-2xl font-bold text-white">{toFaDigits(dashboardMetrics.totalCustomers)}</div>
+        </div>
+
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <DollarSign className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs text-gray-400">سود ماهانه</span>
+          </div>
+          <div className="text-xl font-bold text-white">{formatToman(dashboardMetrics.profit)}</div>
+        </div>
+
+        <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <GitBranch className="w-4 h-4 text-yellow-400" />
+            <span className="text-xs text-gray-400">مهاجرت‌های فعال</span>
+          </div>
+          <div className="text-2xl font-bold text-white">{toFaDigits(dashboardMetrics.activeMigrations)}</div>
+        </div>
+      </div>
+
+      {/* Active Migrations */}
+      <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-6">
+        <h2 className="text-lg font-bold text-white mb-4">مهاجرت‌های فعال</h2>
+        <div className="space-y-3">
+          {migrations.filter(m => m.status === 'IN_PROGRESS').map((migration) => (
+            <div key={migration.id} className="p-4 bg-white/5 rounded-lg border border-white/10">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <div className="text-sm font-medium text-white">{migration.resource.name}</div>
+                  <div className="text-xs text-gray-400 mt-1">
+                    {migration.fromProvider.name} → {migration.toProvider.name}
+                  </div>
+                </div>
+                <div className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">
+                  در حال انجام
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="flex justify-between text-xs text-gray-400 mb-1">
+                  <span>پیشرفت</span>
+                  <span>45%</span>
+                </div>
+                <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-full bg-yellow-500 rounded-full" style={{ width: '45%' }}></div>
+                </div>
+              </div>
+            </div>
           ))}
+        </div>
+      </div>
+
+      {/* Revenue Chart Placeholder */}
+      <div className="bg-[#0a0f1f] rounded-xl border border-white/5 p-6">
+        <h2 className="text-lg font-bold text-white mb-4">نمودار درآمد و هزینه</h2>
+        <div className="h-64 bg-white/5 rounded-lg flex items-center justify-center">
+          <p className="text-gray-400 text-sm">نمودار درآمد ماهانه (به زودی)</p>
         </div>
       </div>
     </div>

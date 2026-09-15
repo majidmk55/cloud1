@@ -21,6 +21,7 @@ const NotFound = lazy(() => import('./pages/Other').then(m => ({ default: m.NotF
 const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard').then(m => ({ default: m.AdminDashboard })));
 const AdminBI = lazy(() => import('./pages/admin/BI').then(m => ({ default: m.AdminBI })));
+const AdminResources = lazy(() => import('./pages/admin/Resources').then(m => ({ default: m.AdminResources })));
 
 function LoadingFallback() {
   return (
@@ -62,18 +63,14 @@ export default function App() {
               {/* Login */}
               <Route path="/login" element={<Login />} />
 
-              {/* Admin Panel */}
+              {/* Admin Panel - Isolated OPS Plane */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
+                <Route path="resources" element={<AdminResources />} />
                 <Route path="bi" element={<AdminBI />} />
-                <Route path="revenue" element={<div className="text-ink">تقسیم درآمد (به زودی)</div>} />
-                <Route path="services" element={<div className="text-ink">سرویس‌ها (به زودی)</div>} />
-                <Route path="finance" element={<div className="text-ink">مالی (به زودی)</div>} />
-                <Route path="customers" element={<div className="text-ink">مشتریان (به زودی)</div>} />
-                <Route path="datacenters" element={<div className="text-ink">دیتاسنترها (به زودی)</div>} />
-                <Route path="reports" element={<div className="text-ink">گزارش‌ها (به زودی)</div>} />
-                <Route path="audit" element={<div className="text-ink">رویدادها (به زودی)</div>} />
-                <Route path="settings" element={<div className="text-ink">تنظیمات (به زودی)</div>} />
+                <Route path="migrations" element={<div className="text-white">مهاجرت‌ها (به زودی)</div>} />
+                <Route path="finance" element={<div className="text-white">مالی (به زودی)</div>} />
+                <Route path="settings" element={<div className="text-white">تنظیمات (به زودی)</div>} />
               </Route>
 
               {/* 404 */}
