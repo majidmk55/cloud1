@@ -109,30 +109,20 @@ export function Landing() {
       <section id="home" className="relative min-h-screen flex items-center justify-center pt-20">
         <HeroBackground />
         
-        {/* Hero Content */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-40">
+        {/* Hero Content - Only CTA Buttons */}
+        <div className="absolute bottom-16 left-0 right-0 z-10 flex justify-center px-6">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4"
           >
-            <h1 className="text-6xl md:text-8xl font-black mb-6 text-white">
-              ابران سیستم
-            </h1>
-            
-            <h2 className="text-2xl md:text-3xl text-[#00d4ff] mb-10 font-light">
-              راهکارهای هوشمند ابری و هوش مصنوعی
-            </h2>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-[#00d4ff] text-[#0a1628] rounded-lg font-bold text-lg hover:bg-[#4fc3f7] transition-all shadow-lg shadow-[#00d4ff]/30 hover:shadow-[#00d4ff]/50">
-                مشاوره رایگان
-              </button>
-              <button className="px-8 py-4 bg-transparent text-white rounded-lg font-bold text-lg hover:bg-white/10 transition-all border-2 border-white/30">
-                اطلاعات بیشتر
-              </button>
-            </div>
+            <button className="px-8 py-4 bg-[#00d4ff] text-[#0a1628] rounded-lg font-bold text-lg hover:bg-[#4fc3f7] transition-all shadow-lg shadow-[#00d4ff]/30 hover:shadow-[#00d4ff]/50">
+              مشاوره رایگان
+            </button>
+            <button className="px-8 py-4 bg-transparent text-white rounded-lg font-bold text-lg hover:bg-white/10 transition-all border-2 border-white/30">
+              اطلاعات بیشتر
+            </button>
           </motion.div>
         </div>
       </section>
