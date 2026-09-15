@@ -1,13 +1,5 @@
 import { useEffect, useRef } from 'react';
 
-interface Node {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  size: number;
-}
-
 export function HeroBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -25,110 +17,59 @@ export function HeroBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Create nodes for subtle digital cloud mesh
-    const nodes: Node[] = [];
-    const nodeCount = 60;
-    const cloudCenterX = canvas.width / 2;
-    const cloudCenterY = canvas.height / 2;
-
-    for (let i = 0; i < nodeCount; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 250 + 100;
-      nodes.push({
-        x: cloudCenterX + Math.cos(angle) * radius,
-        y: cloudCenterY + Math.sin(angle) * radius * 0.5,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: (Math.random() - 0.5) * 0.15,
-        size: Math.random() * 1.5 + 0.5,
-      });
-    }
-
     let animationId: number;
-    let frame = 0;
+    let offset = 0;
 
     const animate = () => {
-      // Clear canvas with transparency to let CSS background show through
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      frame++;
+      
+      // Slow horizontal pan animation
+      offset += 0.1;
+      if (offset > canvas.width) offset = 0;
 
-      // Draw subtle nodes (dark blue, low opacity)
-      for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
+      // Draw faint clouds using radial gradients
+      const clouds = [
+        { x: canvas.width * 0.2, y: canvas.height * 0.3, radius: 200, opacity: 0.4 },
+        { x: canvas.width * 0.7, y: canvas.height * 0.25, radius: 180, opacity: 0.35 },
+        { x: canvas.width * 0.5, y: canvas.height * 0.6, radius: 250, opacity: 0.45 },
+        { x: canvas.width * 0.15, y: canvas.height * 0.7, radius: 220, opacity: 0.4 },
+        { x: canvas.width * 0.85, y: canvas.height * 0.65, radius: 190, opacity: 0.38 },
+        { x: canvas.width * 0.4, y: canvas.height * 0.4, radius: 160, opacity: 0.3 },
+        { x: canvas.width * 0.6, y: canvas.height * 0.8, radius: 240, opacity: 0.42 },
+      ];
+
+      clouds.forEach((cloud) => {
+        // Apply horizontal pan
+        const cloudX = (cloud.x + offset) % (canvas.width + cloud.radius * 2) - cloud.radius;
         
-        // Update position
-        node.x += node.vx;
-        node.y += node.vy;
-
-        // Bounce back if too far
-        const dx = node.x - cloudCenterX;
-        const dy = node.y - cloudCenterY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        // Cloud shadow (depth)
+        const shadowGradient = ctx.createRadialGradient(
+          cloudX, cloud.y, 0,
+          cloudX, cloud.y, cloud.radius
+        );
+        shadowGradient.addColorStop(0, `rgba(179, 229, 252, ${cloud.opacity * 0.3})`);
+        shadowGradient.addColorStop(0.5, `rgba(224, 247, 250, ${cloud.opacity * 0.2})`);
+        shadowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
         
-        if (dist > 300) {
-          node.vx *= -0.5;
-          node.vy *= -0.5;
-        }
-
-        // Draw connections (very subtle, dark blue)
-        for (let j = i + 1; j < nodes.length; j++) {
-          const other = nodes[j];
-          const d = Math.sqrt(
-            Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2)
-          );
-          
-          if (d < 120) {
-            ctx.strokeStyle = `rgba(10, 22, 40, ${(1 - d / 120) * 0.08})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.stroke();
-          }
-        }
-
-        // Draw node (dark blue, very subtle)
-        ctx.fillStyle = `rgba(10, 22, 40, ${0.15 + Math.sin(frame * 0.01 + i) * 0.05})`;
+        ctx.fillStyle = shadowGradient;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+        ctx.arc(cloudX, cloud.y, cloud.radius, 0, Math.PI * 2);
         ctx.fill();
-      }
 
-      // Draw subtle AI orb (warm white glow)
-      const orbRadius = 50 + Math.sin(frame * 0.015) * 3;
-      const orbX = cloudCenterX;
-      const orbY = cloudCenterY;
-
-      // Soft warm glow
-      const gradient = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbRadius * 2.5);
-      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
-      gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(orbX, orbY, orbRadius * 2.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Subtle rings
-      for (let i = 0; i < 2; i++) {
-        const ringRadius = orbRadius + 15 + i * 12;
-        ctx.strokeStyle = `rgba(10, 22, 40, ${0.06 - i * 0.02})`;
-        ctx.lineWidth = 1;
+        // Cloud highlight (bright)
+        const highlightGradient = ctx.createRadialGradient(
+          cloudX - cloud.radius * 0.2, cloud.y - cloud.radius * 0.2, 0,
+          cloudX, cloud.y, cloud.radius * 0.8
+        );
+        highlightGradient.addColorStop(0, `rgba(255, 255, 255, ${cloud.opacity})`);
+        highlightGradient.addColorStop(0.6, `rgba(255, 255, 255, ${cloud.opacity * 0.5})`);
+        highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        
+        ctx.fillStyle = highlightGradient;
         ctx.beginPath();
-        ctx.arc(orbX, orbY, ringRadius, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      // Orb core (soft white)
-      const orbGradient = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, orbRadius);
-      orbGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-      orbGradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.08)');
-      orbGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      
-      ctx.fillStyle = orbGradient;
-      ctx.beginPath();
-      ctx.arc(orbX, orbY, orbRadius, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.arc(cloudX, cloud.y, cloud.radius * 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
       animationId = requestAnimationFrame(animate);
     };
@@ -143,40 +84,34 @@ export function HeroBackground() {
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden">
-      {/* Sky gradient background */}
+      {/* Sky gradient background - exact colors from spec */}
       <div 
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(180deg, #87CEEB 0%, #4facfe 30%, #00f2fe 70%, #87CEEB 100%)'
+          background: 'linear-gradient(to bottom, #1E90FF 0%, #4facfe 50%, #87CEEB 100%)'
         }}
       />
       
-      {/* Soft cloud overlay using CSS */}
-      <div 
-        className="absolute inset-0 opacity-70"
-        style={{
-          background: `
-            radial-gradient(ellipse 80% 50% at 20% 40%, rgba(255,255,255,0.8) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 40% at 80% 30%, rgba(255,255,255,0.7) 0%, transparent 50%),
-            radial-gradient(ellipse 70% 45% at 50% 60%, rgba(255,255,255,0.6) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 35% at 30% 70%, rgba(255,255,255,0.5) 0%, transparent 50%),
-            radial-gradient(ellipse 55% 40% at 70% 50%, rgba(255,255,255,0.65) 0%, transparent 50%)
-          `
-        }}
-      />
-      
-      {/* White wash overlay for faded effect */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.2) 100%)'
-        }}
-      />
-      
-      {/* Canvas for subtle digital elements */}
+      {/* Canvas for faint clouds */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
+        style={{ opacity: 0.6 }}
+      />
+      
+      {/* Additional CSS cloud layer for softness */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 60% 40% at 25% 35%, rgba(255,255,255,0.5) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 35% at 75% 30%, rgba(255,255,255,0.45) 0%, transparent 50%),
+            radial-gradient(ellipse 70% 45% at 50% 65%, rgba(255,255,255,0.55) 0%, transparent 50%),
+            radial-gradient(ellipse 55% 40% at 20% 75%, rgba(255,255,255,0.48) 0%, transparent 50%),
+            radial-gradient(ellipse 65% 42% at 80% 70%, rgba(255,255,255,0.52) 0%, transparent 50%)
+          `,
+          filter: 'blur(15px)'
+        }}
       />
     </div>
   );

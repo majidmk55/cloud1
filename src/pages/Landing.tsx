@@ -78,23 +78,23 @@ export function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#0a1628] overflow-x-hidden" dir="rtl">
-      {/* Navigation - Light theme */}
+    <div className="min-h-screen bg-white text-[#0a192f] overflow-x-hidden" dir="rtl">
+      {/* Navigation - Light theme with dark navy text */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Cloud className="w-8 h-8 text-[#0a1628]" />
-            <span className="text-xl font-bold text-[#0a1628]">ابران سیستم</span>
+            <Cloud className="w-8 h-8 text-[#0a192f]" />
+            <span className="text-xl font-bold text-[#0a192f]">ابران سیستم</span>
           </div>
           
           <div className="hidden md:flex items-center gap-8">
-            <a href="#home" className="text-[#0a1628] hover:text-[#4facfe] transition-colors font-medium">خانه</a>
-            <a href="#services" className="text-[#0a1628] hover:text-[#4facfe] transition-colors font-medium">خدمات</a>
-            <a href="#about" className="text-[#0a1628] hover:text-[#4facfe] transition-colors font-medium">درباره ما</a>
-            <a href="#contact" className="text-[#0a1628] hover:text-[#4facfe] transition-colors font-medium">تماس با ما</a>
+            <a href="#home" className="text-[#0a192f] hover:text-[#1E90FF] transition-colors font-medium">خانه</a>
+            <a href="#services" className="text-[#0a192f] hover:text-[#1E90FF] transition-colors font-medium">خدمات</a>
+            <a href="#about" className="text-[#0a192f] hover:text-[#1E90FF] transition-colors font-medium">درباره ما</a>
+            <a href="#contact" className="text-[#0a192f] hover:text-[#1E90FF] transition-colors font-medium">تماس با ما</a>
           </div>
 
-          <button className="px-6 py-2 bg-[#0a1628] text-white rounded-lg font-bold hover:bg-[#1a3a6c] transition-colors shadow-lg">
+          <button className="px-6 py-2 bg-[#0a192f] text-white rounded-lg font-bold hover:bg-[#2c3e50] transition-colors shadow-lg">
             شروع کنید
           </button>
         </div>
@@ -112,10 +112,10 @@ export function Landing() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <button className="px-8 py-4 bg-[#0a1628] text-white rounded-lg font-bold text-lg hover:bg-[#1a3a6c] transition-all shadow-xl hover:shadow-2xl">
+            <button className="px-8 py-4 bg-[#0a192f] text-white rounded-lg font-bold text-lg hover:bg-[#2c3e50] transition-all shadow-xl hover:shadow-2xl">
               مشاوره رایگان
             </button>
-            <button className="px-8 py-4 bg-white text-[#0a1628] rounded-lg font-bold text-lg hover:bg-gray-50 transition-all shadow-xl border-2 border-[#0a1628]/10">
+            <button className="px-8 py-4 bg-white text-[#0a192f] rounded-lg font-bold text-lg hover:bg-gray-50 transition-all shadow-xl border-2 border-[#0a192f]/20">
               اطلاعات بیشتر
             </button>
           </motion.div>
@@ -132,7 +132,7 @@ export function Landing() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#0a1628]">خدمات ما</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#0a192f]">خدمات ما</h2>
             <p className="text-xl text-gray-600">راهکارهای جامع برای نیازهای دیجیتال شما</p>
           </motion.div>
 
@@ -152,10 +152,10 @@ export function Landing() {
                   
                   <div className="relative z-10">
                     <div className="w-16 h-16 bg-gradient-to-br from-[#4facfe]/10 to-[#00f2fe]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      <Icon className="w-8 h-8 text-[#0a1628]" />
+                      <Icon className="w-8 h-8 text-[#0a192f]" />
                     </div>
                     
-                    <h3 className="text-xl font-bold mb-3 text-[#0a1628]">{service.title}</h3>
+                    <h3 className="text-xl font-bold mb-3 text-[#0a192f]">{service.title}</h3>
                     <p className="text-gray-600 leading-relaxed">{service.description}</p>
                   </div>
                 </motion.div>
@@ -170,28 +170,28 @@ export function Landing() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-black text-[#0a1628] mb-2">
+              <div className="text-5xl md:text-6xl font-black text-[#0a192f] mb-2">
                 {counters.projects}+
               </div>
               <div className="text-gray-600 text-lg">پروژه موفق</div>
             </div>
             
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-black text-[#0a1628] mb-2">
+              <div className="text-5xl md:text-6xl font-black text-[#0a192f] mb-2">
                 {counters.clients}+
               </div>
               <div className="text-gray-600 text-lg">مشتری راضی</div>
             </div>
             
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-black text-[#0a1628] mb-2">
+              <div className="text-5xl md:text-6xl font-black text-[#0a192f] mb-2">
                 {counters.uptime}%
               </div>
               <div className="text-gray-600 text-lg">آپتایم سرویس</div>
             </div>
             
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-black text-[#0a1628] mb-2">
+              <div className="text-5xl md:text-6xl font-black text-[#0a192f] mb-2">
                 {counters.team}+
               </div>
               <div className="text-gray-600 text-lg">متخصص حرفه‌ای</div>
@@ -210,7 +210,7 @@ export function Landing() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#0a1628]">تماس با ما</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#0a192f]">تماس با ما</h2>
             <p className="text-xl text-gray-600">ما آماده پاسخگویی به سوالات شما هستیم</p>
           </motion.div>
 
@@ -228,7 +228,7 @@ export function Landing() {
                   <label className="block text-gray-700 mb-2 font-medium">نام و نام خانوادگی</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0a1628] focus:border-[#4facfe] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0a192f] focus:border-[#4facfe] focus:outline-none transition-colors"
                     placeholder="نام خود را وارد کنید"
                   />
                 </div>
@@ -237,7 +237,7 @@ export function Landing() {
                   <label className="block text-gray-700 mb-2 font-medium">ایمیل</label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0a1628] focus:border-[#4facfe] focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0a192f] focus:border-[#4facfe] focus:outline-none transition-colors"
                     placeholder="email@example.com"
                     dir="ltr"
                   />
@@ -247,14 +247,14 @@ export function Landing() {
                   <label className="block text-gray-700 mb-2 font-medium">پیام</label>
                   <textarea
                     rows={5}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0a1628] focus:border-[#4facfe] focus:outline-none transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-[#0a192f] focus:border-[#4facfe] focus:outline-none transition-colors resize-none"
                     placeholder="پیام خود را بنویسید..."
                   />
                 </div>
                 
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-[#0a1628] text-white rounded-lg font-bold text-lg hover:bg-[#1a3a6c] transition-all shadow-lg hover:shadow-xl"
+                  className="w-full px-8 py-4 bg-[#0a192f] text-white rounded-lg font-bold text-lg hover:bg-[#2c3e50] transition-all shadow-lg hover:shadow-xl"
                 >
                   ارسال پیام
                 </button>
@@ -270,35 +270,35 @@ export function Landing() {
               className="space-y-8"
             >
               <div className="bg-gradient-to-br from-[#f0f9ff] to-white rounded-xl p-8 border border-gray-200 shadow-lg">
-                <h3 className="text-2xl font-bold mb-6 text-[#0a1628]">اطلاعات تماس</h3>
+                <h3 className="text-2xl font-bold mb-6 text-[#0a192f]">اطلاعات تماس</h3>
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#4facfe]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-[#0a1628]" />
+                      <Phone className="w-6 h-6 text-[#0a192f]" />
                     </div>
                     <div>
-                      <h4 className="font-bold mb-1 text-[#0a1628]">تلفن</h4>
+                      <h4 className="font-bold mb-1 text-[#0a192f]">تلفن</h4>
                       <p className="text-gray-600" dir="ltr">+98 21 1234 5678</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#4facfe]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-6 h-6 text-[#0a1628]" />
+                      <Mail className="w-6 h-6 text-[#0a192f]" />
                     </div>
                     <div>
-                      <h4 className="font-bold mb-1 text-[#0a1628]">ایمیل</h4>
+                      <h4 className="font-bold mb-1 text-[#0a192f]">ایمیل</h4>
                       <p className="text-gray-600" dir="ltr">info@abran-system.ir</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#4facfe]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-[#0a1628]" />
+                      <MapPin className="w-6 h-6 text-[#0a192f]" />
                     </div>
                     <div>
-                      <h4 className="font-bold mb-1 text-[#0a1628]">آدرس</h4>
+                      <h4 className="font-bold mb-1 text-[#0a192f]">آدرس</h4>
                       <p className="text-gray-600">تهران، خیابان ولیعصر، برج ابران، طبقه ۱۲</p>
                     </div>
                   </div>
@@ -306,7 +306,7 @@ export function Landing() {
               </div>
 
               <div className="bg-gradient-to-br from-[#4facfe]/10 to-[#00f2fe]/10 rounded-xl p-8 border border-[#4facfe]/20 shadow-lg">
-                <h3 className="text-2xl font-bold mb-4 text-[#0a1628]">ساعات کاری</h3>
+                <h3 className="text-2xl font-bold mb-4 text-[#0a192f]">ساعات کاری</h3>
                 <div className="space-y-2 text-gray-700">
                   <p>شنبه تا چهارشنبه: ۸:۰۰ - ۱۷:۰۰</p>
                   <p>پنج‌شنبه: ۸:۰۰ - ۱۳:۰۰</p>
@@ -319,7 +319,7 @@ export function Landing() {
       </section>
 
       {/* Footer - Light theme */}
-      <footer className="bg-[#0a1628] text-white py-12 px-6">
+      <footer className="bg-[#0a192f] text-white py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
