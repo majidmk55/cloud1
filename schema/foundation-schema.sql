@@ -352,3 +352,191 @@ CREATE INDEX idx_latency_time ON latency_probe_results(probe_timestamp);
 -- Resources with Region Awareness
 ALTER TABLE IF EXISTS resources ADD COLUMN IF NOT EXISTS region_code VARCHAR(10);
 CREATE INDEX IF NOT EXISTS idx_resources_region ON resources(region_code);
+
+-- ═══════════════════════════════════════════════════════════
+-- EXTERNAL INTEGRATIONS TABLES
+-- ═══════════════════════════════════════════════════════════
+
+-- Processed Transactions (Idempotency)
+CREATE TABLE processed_transactions (
+  idempotency_key VARCHAR(255) PRIMARY KEY,
+  integration VARCHAR(50) NOT NULL, -- PAYMENT, TAX, NOTIFICATION, DNS, CDN, MONITORING
+  operation VARCHAR(50) NOT NULL, -- INITIATE, VERIFY, SUBMIT, SEND, CREATE_RECORD, PURGE
+  request_hash VARCHAR(64) NOT NULL,
+  response_status VARCHAR(20) NOT NULL, -- SUCCESS, FAILED, PENDING
+  gateway_ref VARCHAR(255),
+  processed_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL,
+  
+  CONSTRAINT chk_integration CHECK (integration IN ('PAYMENT', 'TAX', 'NOTIFICATION', 'DNS', 'CDN', 'MONITORING')),
+  CONSTRAINT chk_response_status CHECK (response_status IN ('SUCCESS', 'FAILED', 'PENDING'))
+);
+
+CREATE INDEX idx_processed_tx_integration ON processed_transactions(integration, processed_at);
+CREATE INDEX idx_processed_tx_expires ON processed_transactions(expires_at);
+
+-- Integration Audit Log (Immutable)
+CREATE TABLE integration_audit_log (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  trace_id VARCHAR(64) NOT NULL,
+  integration VARCHAR(50) NOT NULL,
+  operation VARCHAR(50) NOT NULL,
+  request_hash VARCHAR(64) NOT NULL,
+  response_status INTEGER NOT NULL,
+  duration_ms INTEGER NOT NULL,
+  error TEXT,
+  timestamp TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT chk_audit_integration CHECK (integration IN ('PAYMENT', 'TAX', 'NOTIFICATION', 'DNS', 'CDN', 'MONITORING'))
+);
+
+CREATE INDEX idx_integration_audit_integration ON integration_audit_log(integration, timestamp);
+CREATE INDEX idx_integration_audit_trace ON integration_audit_log(trace_id);
+
+-- Prevent UPDATE/DELETE on audit log
+CREATE OR REPLACE FUNCTION prevent_integration_audit_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+  RAISE EXCEPTION 'Integration audit log is immutable';
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_prevent_integration_audit_update
+  BEFORE UPDATE ON integration_audit_log
+  FOR EACH ROW EXECUTE FUNCTION prevent_integration_audit_mutation();
+
+CREATE TRIGGER trg_prevent_integration_audit_delete
+  BEFORE DELETE ON integration_audit_log
+  FOR EACH ROW EXECUTE FUNCTION prevent_integration_audit_mutation();
+
+-- Tax Pending Submissions (Circuit Breaker Queue)
+CREATE TABLE tax_pending_submissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  invoice_ids UUID[] NOT NULL,
+  batch_xml TEXT NOT NULL,
+  retry_count INTEGER DEFAULT 0,
+  last_error TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  next_retry_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX idx_tax_pending_retry ON tax_pending_submissions(next_retry_at);
+
+-- Notification Logs
+CREATE TABLE notification_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id UUID NOT NULL,
+  channel VARCHAR(10) NOT NULL, -- EMAIL, SMS
+  template_id VARCHAR(100) NOT NULL,
+  recipient VARCHAR(255) NOT NULL,
+  message_id VARCHAR(255),
+  status VARCHAR(20) NOT NULL, -- QUEUED, SENT, DELIVERED, BOUNCED, COMPLAINT, FAILED
+  priority VARCHAR(10) DEFAULT 'normal', -- HIGH, NORMAL, LOW
+  sent_at TIMESTAMPTZ,
+  delivered_at TIMESTAMPTZ,
+  error TEXT,
+  cost_amount DECIMAL(10, 4),
+  
+  CONSTRAINT chk_notification_channel CHECK (channel IN ('EMAIL', 'SMS')),
+  CONSTRAINT chk_notification_status CHECK (status IN ('QUEUED', 'SENT', 'DELIVERED', 'BOUNCED', 'COMPLAINT', 'FAILED')),
+  CONSTRAINT chk_notification_priority CHECK (priority IN ('HIGH', 'NORMAL', 'LOW'))
+);
+
+CREATE INDEX idx_notification_logs_tenant ON notification_logs(tenant_id, sent_at);
+CREATE INDEX idx_notification_logs_status ON notification_logs(status, sent_at);
+
+-- DNS Pending Changes (Circuit Breaker Queue)
+CREATE TABLE dns_pending_changes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  zone_id VARCHAR(255) NOT NULL,
+  record_type VARCHAR(10) NOT NULL,
+  record_name VARCHAR(255) NOT NULL,
+  new_content TEXT NOT NULL,
+  operation VARCHAR(10) NOT NULL, -- CREATE, UPDATE, DELETE
+  retry_count INTEGER DEFAULT 0,
+  last_error TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  next_retry_at TIMESTAMPTZ NOT NULL,
+  
+  CONSTRAINT chk_dns_operation CHECK (operation IN ('CREATE', 'UPDATE', 'DELETE'))
+);
+
+CREATE INDEX idx_dns_pending_retry ON dns_pending_changes(next_retry_at);
+
+-- CDN Metrics (Hourly Aggregation)
+CREATE TABLE cdn_metrics_hourly (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  zone_id VARCHAR(255) NOT NULL,
+  hour TIMESTAMPTZ NOT NULL,
+  bandwidth_gb FLOAT NOT NULL,
+  requests INTEGER NOT NULL,
+  threats INTEGER NOT NULL,
+  cache_ratio FLOAT NOT NULL,
+  cost_amount DECIMAL(10, 4),
+  
+  UNIQUE(zone_id, hour)
+);
+
+CREATE INDEX idx_cdn_metrics_zone ON cdn_metrics_hourly(zone_id, hour);
+
+-- Monitor External Mappings
+CREATE TABLE monitor_external_mappings (
+  resource_id UUID NOT NULL,
+  monitor_id VARCHAR(255) NOT NULL,
+  provider VARCHAR(50) NOT NULL, -- UPTIMEROBOT, PINGDOM
+  last_synced_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  PRIMARY KEY(resource_id, provider),
+  CONSTRAINT chk_monitor_provider CHECK (provider IN ('UPTIMEROBOT', 'PINGDOM'))
+);
+
+CREATE INDEX idx_monitor_mappings_provider ON monitor_external_mappings(provider);
+
+-- Circuit Breaker States
+CREATE TABLE circuit_breaker_states (
+  integration VARCHAR(50) PRIMARY KEY,
+  state VARCHAR(20) NOT NULL, -- CLOSED, OPEN, HALF_OPEN
+  failure_count INTEGER DEFAULT 0,
+  last_failure_at TIMESTAMPTZ,
+  last_state_change TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT chk_cb_state CHECK (state IN ('CLOSED', 'OPEN', 'HALF_OPEN')),
+  CONSTRAINT chk_cb_integration CHECK (integration IN ('PAYMENT_ZARINPAL', 'PAYMENT_LIARA', 'TAX_IRAN', 'NOTIFICATION_SENDGRID', 'NOTIFICATION_KAVENEGAR', 'DNS_CLOUDFLARE', 'CDN_CLOUDFLARE', 'MONITORING_UPTIMEROBOT'))
+);
+
+-- Initialize circuit breaker states
+INSERT INTO circuit_breaker_states (integration, state) VALUES
+  ('PAYMENT_ZARINPAL', 'CLOSED'),
+  ('PAYMENT_LIARA', 'CLOSED'),
+  ('TAX_IRAN', 'CLOSED'),
+  ('NOTIFICATION_SENDGRID', 'CLOSED'),
+  ('NOTIFICATION_KAVENEGAR', 'CLOSED'),
+  ('DNS_CLOUDFLARE', 'CLOSED'),
+  ('CDN_CLOUDFLARE', 'CLOSED'),
+  ('MONITORING_UPTIMEROBOT', 'CLOSED');
+
+-- Webhook Events (Idempotency for inbound webhooks)
+CREATE TABLE webhook_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  provider VARCHAR(50) NOT NULL, -- ZARINPAL, LIARA, SENDGRID, KAVENEGAR, CLOUDFLARE, UPTIMEROBOT
+  event_id VARCHAR(255) NOT NULL,
+  event_type VARCHAR(100) NOT NULL,
+  payload JSONB NOT NULL,
+  signature VARCHAR(255),
+  processed BOOLEAN DEFAULT false,
+  processed_at TIMESTAMPTZ,
+  received_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  UNIQUE(provider, event_id),
+  CONSTRAINT chk_webhook_provider CHECK (provider IN ('ZARINPAL', 'LIARA', 'SENDGRID', 'KAVENEGAR', 'CLOUDFLARE', 'UPTIMEROBOT'))
+);
+
+CREATE INDEX idx_webhook_events_provider ON webhook_events(provider, received_at);
+CREATE INDEX idx_webhook_events_processed ON webhook_events(processed);
+
+-- Sample data
+INSERT INTO processed_transactions (idempotency_key, integration, operation, request_hash, response_status, expires_at) VALUES
+  ('sample-key-001', 'PAYMENT', 'INITIATE', 'hash123', 'SUCCESS', NOW() + INTERVAL '24 hours');
+
+INSERT INTO notification_logs (tenant_id, channel, template_id, recipient, status, priority) VALUES
+  ('00000000-0000-0000-0000-000000000001', 'EMAIL', 'welcome', 'user@example.com', 'SENT', 'NORMAL');
