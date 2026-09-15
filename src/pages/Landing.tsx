@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Cloud, Cpu, Shield, BarChart3, Mail, Phone, MapPin } from 'lucide-react';
 import { HeroBackground } from '../components/HeroBackground';
 import { ProductMegaMenu, MobileMenu } from '../components/ProductMenu';
+import { ChatWidget } from '../components/ChatWidget';
 
 import { AdminLoginModal } from '../components/AdminLoginModal';
 
@@ -413,6 +414,9 @@ export function Landing() {
         isOpen={adminModalOpen}
         onClose={() => setAdminModalOpen(false)}
       />
+
+      {/* AI Chat Widget - Bottom Right */}
+      <ChatWidget />
     </div>
   );
 }
