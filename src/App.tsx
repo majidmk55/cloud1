@@ -23,6 +23,7 @@ const AdminDashboard = lazy(() => import('./pages/admin/Dashboard').then(m => ({
 const AdminBI = lazy(() => import('./pages/admin/BI').then(m => ({ default: m.AdminBI })));
 const AdminResources = lazy(() => import('./pages/admin/Resources').then(m => ({ default: m.AdminResources })));
 const BoundedContexts = lazy(() => import('./pages/admin/BoundedContexts').then(m => ({ default: m.BoundedContexts })));
+const BiDashboard = lazy(() => import('./pages/admin/BiDashboard').then(m => ({ default: m.BiDashboard })));
 
 function LoadingFallback() {
   return (
@@ -68,7 +69,7 @@ export default function App() {
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="resources" element={<AdminResources />} />
-                <Route path="bi" element={<AdminBI />} />
+                <Route path="bi" element={<BiDashboard />} />
                 <Route path="contexts" element={<BoundedContexts />} />
                 <Route path="migrations" element={<div className="text-white">مهاجرت‌ها (به زودی)</div>} />
                 <Route path="finance" element={<div className="text-white">مالی (به زودی)</div>} />

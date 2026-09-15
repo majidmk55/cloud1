@@ -16,6 +16,8 @@
     "@types/node": "^26.5.1",
     "canvas-confetti": "^1.9.3",
     "date-fns": "^2.30.0",
+    "echarts": "^6.1.0",
+    "echarts-for-react": "^3.0.6",
     "framer-motion": "^11.16.1",
     "lucide-react": "^0.294.0",
     "nats": "^2.29.3",
