@@ -3,12 +3,14 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Server, GitBranch, DollarSign, Settings, 
   Search, Bell, User, Shield, AlertTriangle, Menu, X,
-  Users, ShoppingCart, Cpu, Workflow, Scale, FileCode, Database
+  Users, ShoppingCart, Cpu, Workflow, Scale, FileCode, Database,
+  BarChart3, TrendingUp
 } from 'lucide-react';
 import { adminUsers } from '../data/admin-data';
 
 const navItems = [
   { path: '/admin', label: 'داشبورد', icon: LayoutDashboard },
+  { path: '/admin/bi', label: 'هوش تجاری (BI)', icon: BarChart3 },
   { path: '/admin/resources', label: 'منابع', icon: Server },
   { path: '/admin/migrations', label: 'مهاجرت‌ها', icon: GitBranch },
   { path: '/admin/finance', label: 'مالی', icon: DollarSign },
