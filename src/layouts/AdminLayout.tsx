@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Server, GitBranch, DollarSign, Settings, 
-  Search, Bell, User, Shield, AlertTriangle, Menu, X
+  Search, Bell, User, Shield, AlertTriangle, Menu, X,
+  Users, ShoppingCart, Cpu, Workflow, Scale, FileCode, Database
 } from 'lucide-react';
 import { adminUsers } from '../data/admin-data';
 
@@ -12,6 +13,7 @@ const navItems = [
   { path: '/admin/migrations', label: 'مهاجرت‌ها', icon: GitBranch },
   { path: '/admin/finance', label: 'مالی', icon: DollarSign },
   { path: '/admin/settings', label: 'تنظیمات', icon: Settings },
+  { path: '/admin/contexts', label: 'Bounded Contexts', icon: Database },
 ];
 
 export function AdminLayout() {
