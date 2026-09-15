@@ -3,89 +3,180 @@
 @theme {
   --font-sans: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Light theme tokens */
+  --color-bg: #FFFFFF;
+  --color-surface: #F8FAFC;
+  --color-sunken: #F1F5F9;
+  --color-ink: #0F172A;
+  --color-body: #334155;
+  --color-muted: #64748B;
+  --color-faint: #94A3B8;
+  --color-border: #E2E8F0;
+  --color-strong: #CBD5E1;
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-soft: #EFF6FF;
+  --color-accent: #7C3AED;
+  --color-accent-soft: #F5F3FF;
+  --color-success: #059669;
+  --color-success-soft: #ECFDF5;
+  --color-warn: #D97706;
+  --color-warn-soft: #FFFBEB;
+  --color-danger: #DC2626;
+  --color-danger-soft: #FEF2F2;
+  
+  /* Data viz (colorblind-safe) */
+  --color-data-1: #2563EB;
+  --color-data-2: #0EA5E9;
+  --color-data-3: #7C3AED;
+  --color-data-4: #059669;
+  --color-data-5: #D97706;
+  --color-data-6: #DC2626;
+  --color-data-7: #475569;
+  
+  /* Radius */
+  --radius-card: 16px;
+  --radius-control: 10px;
+  --radius-pill: 999px;
+  
+  /* Shadow */
+  --shadow-card: 0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.06);
 }
 
 @layer base {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #1e293b #050816;
+    scrollbar-color: #CBD5E1 #F1F5F9;
   }
   *::-webkit-scrollbar { width: 6px; height: 6px; }
-  *::-webkit-scrollbar-track { background: #050816; }
-  *::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-  *::-webkit-scrollbar-thumb:hover { background: #334155; }
+  *::-webkit-scrollbar-track { background: #F1F5F9; }
+  *::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+  *::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
   ::selection {
-    background-color: rgba(59, 130, 246, 0.3);
-    color: white;
+    background-color: rgba(37, 99, 235, 0.2);
+    color: #0F172A;
   }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    font-feature-settings: "ss01", "ss02";
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #FFFFFF;
+    color: #0F172A;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.8;
+  }
+  
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    direction: ltr;
+    text-align: left;
+  }
+  
+  /* Focus ring */
+  *:focus-visible {
+    outline: 2px solid #2563EB;
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
 @layer components {
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.06);
+  }
+  
+  .btn-primary {
+    background: #2563EB;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 200ms cubic-bezier(.2,.8,.2,1);
+  }
+  
+  .btn-primary:hover {
+    background: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+  
+  .btn-outline {
+    background: transparent;
+    color: #2563EB;
+    border: 1px solid #2563EB;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 200ms;
+  }
+  
+  .btn-outline:hover {
+    background: #EFF6FF;
+  }
+  
   .gradient-text {
-    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  
+  /* Animations */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-up {
+    animation: fade-up 200ms cubic-bezier(.2,.8,.2,1);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
 
-  .gradient-border {
-    position: relative;
-    background: linear-gradient(#0a0f1f, #0a0f1f) padding-box,
-                linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899) border-box;
-    border: 1px solid transparent;
-  }
+/* ═══════════════════════════════════════════════════════════
+   NAVBAR - Products Link (Pure White with Cyan Glow)
+   ═══════════════════════════════════════════════════════════ */
+.nav-link-products {
+  color: #ffffff !important;
+  transition: all 200ms ease;
+}
 
-  .layer-owned {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.02));
-    border-color: rgba(16, 185, 129, 0.25);
-  }
-  .layer-partner {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
-    border-color: rgba(245, 158, 11, 0.25);
-  }
-  .layer-european {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0.02));
-    border-color: rgba(99, 102, 241, 0.25);
-  }
+.nav-link-products:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
 
-  .glow-blue { box-shadow: 0 0 40px rgba(59, 130, 246, 0.15); }
-  .glow-purple { box-shadow: 0 0 40px rgba(139, 92, 246, 0.15); }
-  .glow-emerald { box-shadow: 0 0 40px rgba(16, 185, 129, 0.15); }
+.nav-link-products:active,
+.nav-link-products:focus {
+  color: #ffffff !important;
+}
 
-  .grid-pattern {
-    background-image:
-      linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
+/* ═══════════════════════════════════════════════════════════
+   ADMIN ACCESS - Discreet Footer Link
+   ═══════════════════════════════════════════════════════════ */
+.admin-access-link {
+  color: #888888;
+  opacity: 0.5;
+  transition: all 300ms ease;
+  font-size: 11px;
+}
 
-  @keyframes pulse-slow {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-  .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .animate-float { animation: float 6s ease-in-out infinite; }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  .animate-shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
-  }
+.admin-access-link:hover {
+  color: #ffffff;
+  opacity: 1;
 }

@@ -1,84 +1,87 @@
-import { useState } from 'react';
-import { Sidebar } from './components/Sidebar';
-import { Overview } from './pages/Overview';
-import { HybridMultiSource } from './pages/HybridMultiSource';
-import { Contexts } from './pages/Contexts';
-import { ADRs } from './pages/ADRs';
-import { Repository } from './pages/Repository';
-import { DatabaseSchema } from './pages/DatabaseSchema';
-import { ProviderAdapters } from './pages/ProviderAdapters';
-import { RBAC } from './pages/RBAC';
-import { DesignSystem } from './pages/DesignSystem';
-import { DesignSystemPhase1 } from './pages/DesignSystemPhase1';
-import { IdentityPhase2 } from './pages/IdentityPhase2';
-import { OrderingPhase3 } from './pages/OrderingPhase3';
-import { ProvisioningPhase4 } from './pages/ProvisioningPhase4';
-import { Phase5Integration } from './pages/Phase5Integration';
-import { Phase6Production } from './pages/Phase6Production';
-import { Phase7Financial } from './pages/Phase7Financial';
-import { Phase8to10 } from './pages/Phase8to10';
-import { Phase11BI } from './pages/Phase11BI';
-import { Phase12Extensibility } from './pages/Phase12Extensibility';
-import { ComprehensiveAudit } from './pages/ComprehensiveAudit';
-import { CICD } from './pages/CICD';
-import { TechStack } from './pages/TechStack';
-import { DoD } from './pages/DoD';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { PublicLayout } from './layouts/PublicLayout';
+import { AdminLayout } from './layouts/AdminLayout';
+import { AuthProvider } from './lib/auth';
+import { ErrorBoundary } from './components/ui';
 
-export type Page =
-  | 'overview' | 'hybrid' | 'contexts' | 'adrs' | 'repository'
-  | 'database' | 'adapters' | 'rbac' | 'design' | 'design-phase1'
-  | 'identity-phase2' | 'ordering-phase3' | 'provisioning-phase4' | 'phase5-integration' | 'phase6-production' | 'phase7-financial' | 'phase8-to-10' | 'phase11-bi' | 'phase12-extensibility' | 'comprehensive-audit' | 'cicd' | 'techstack' | 'dod';
+// Lazy-loaded public pages
+const Landing = lazy(() => import('./pages/Landing').then(m => ({ default: m.Landing })));
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const Services = lazy(() => import('./pages/Services').then(m => ({ default: m.Services })));
+const AI = lazy(() => import('./pages/AI').then(m => ({ default: m.AI })));
+const DataCenter = lazy(() => import('./pages/DataCenter').then(m => ({ default: m.DataCenter })));
+const Pricing = lazy(() => import('./pages/Pricing').then(m => ({ default: m.Pricing })));
+const About = lazy(() => import('./pages/Other').then(m => ({ default: m.About })));
+const Contact = lazy(() => import('./pages/Other').then(m => ({ default: m.Contact })));
+const Status = lazy(() => import('./pages/Other').then(m => ({ default: m.Status })));
+const NotFound = lazy(() => import('./pages/Other').then(m => ({ default: m.NotFound })));
+
+// Lazy-loaded admin pages
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard').then(m => ({ default: m.AdminDashboard })));
+const AdminBI = lazy(() => import('./pages/admin/BI').then(m => ({ default: m.AdminBI })));
+const AdminResources = lazy(() => import('./pages/admin/Resources').then(m => ({ default: m.AdminResources })));
+const BoundedContexts = lazy(() => import('./pages/admin/BoundedContexts').then(m => ({ default: m.BoundedContexts })));
+const BiDashboard = lazy(() => import('./pages/admin/BiDashboard').then(m => ({ default: m.BiDashboard })));
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-bg flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+          </svg>
+        </div>
+        <p className="text-body text-sm">در حال بارگذاری...</p>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('comprehensive-audit');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  const renderPage = () => {
-    const pages = {
-      overview: <Overview onNavigate={setCurrentPage} />,
-      hybrid: <HybridMultiSource />,
-      contexts: <Contexts />,
-      adrs: <ADRs />,
-      repository: <Repository />,
-      database: <DatabaseSchema />,
-      adapters: <ProviderAdapters />,
-      rbac: <RBAC />,
-      design: <DesignSystem />,
-      'design-phase1': <DesignSystemPhase1 />,
-      'identity-phase2': <IdentityPhase2 />,
-      'ordering-phase3': <OrderingPhase3 />,
-      'provisioning-phase4': <ProvisioningPhase4 />,
-      'phase5-integration': <Phase5Integration />,
-      'phase6-production': <Phase6Production />,
-      'phase7-financial': <Phase7Financial />,
-      'phase8-to-10': <Phase8to10 />,
-      'phase11-bi': <Phase11BI />,
-      'phase12-extensibility': <Phase12Extensibility />,
-      'comprehensive-audit': <ComprehensiveAudit />,
-      cicd: <CICD />,
-      techstack: <TechStack />,
-      dod: <DoD />,
-    };
-    return pages[currentPage] || <ComprehensiveAudit />;
-  };
-
   return (
-    <div className="flex h-screen bg-[#050816] text-gray-100 overflow-hidden">
-      <Sidebar
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        isOpen={sidebarOpen}
-        setIsOpen={setSidebarOpen}
-      />
-      <main
-        className={`flex-1 overflow-y-auto transition-all duration-300 ${
-          sidebarOpen ? 'mr-80' : 'mr-16'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-8 py-10">
-          {renderPage()}
-        </div>
-      </main>
-    </div>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              {/* Landing Page - Modern Dark Theme */}
+              <Route path="/" element={<Landing />} />
+
+              {/* Public Website */}
+              <Route element={<PublicLayout />}>
+                <Route path="/home" element={<Home />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/ai" element={<AI />} />
+                <Route path="/datacenter" element={<DataCenter />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/status" element={<Status />} />
+              </Route>
+
+              {/* Login */}
+              <Route path="/login" element={<Login />} />
+
+              {/* Admin Panel - Isolated OPS Plane */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="resources" element={<AdminResources />} />
+                <Route path="bi" element={<BiDashboard />} />
+                <Route path="contexts" element={<BoundedContexts />} />
+                <Route path="migrations" element={<div className="text-white">مهاجرت‌ها (به زودی)</div>} />
+                <Route path="finance" element={<div className="text-white">مالی (به زودی)</div>} />
+                <Route path="settings" element={<div className="text-white">تنظیمات (به زودی)</div>} />
+              </Route>
+
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

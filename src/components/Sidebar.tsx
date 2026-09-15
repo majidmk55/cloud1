@@ -1,7 +1,7 @@
-import { Page } from '../App';
+type Page = string;
 import { 
   LayoutDashboard, Globe, Puzzle, BookOpen, FolderTree, Database,
-  Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart, Server, Zap, Rocket, DollarSign, Brain, BarChart3, Layers, FileSearch
+  Plug, Shield, Palette, GitBranch, Wrench, CheckCircle2, ChevronRight, ChevronLeft, Cloud, ShoppingCart, Server, Zap, Rocket, DollarSign, Brain, BarChart3, Layers, FileSearch, Terminal
 } from 'lucide-react';
 interface SidebarProps {
   currentPage: Page;
@@ -34,6 +34,7 @@ const navItems: { id: Page; label: string; labelEn: string; icon: any; group: st
   { id: 'cicd', label: 'خط لوله CI/CD', labelEn: 'CI/CD Pipeline', icon: GitBranch, group: 'عملیات' },
   { id: 'techstack', label: 'پشته فناوری', labelEn: 'Tech Stack', icon: Wrench, group: 'عملیات' },
   { id: 'dod', label: 'تعریف تکمیل', labelEn: 'Definition of Done', icon: CheckCircle2, group: 'عملیات' },
+  { id: 'setup-script', label: 'اسکریپت راه‌اندازی', labelEn: 'Setup Script', icon: Terminal, group: 'عملیات' },
 ];
 
 const groups = ['معماری', 'مستندات', 'امنیت', 'طراحی', 'Backend', 'عملیات'];
